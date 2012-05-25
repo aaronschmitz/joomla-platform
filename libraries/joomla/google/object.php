@@ -27,7 +27,7 @@ abstract class JGoogleObject
 	/**
 	 * Constructor.
 	 *
-	 * @param   JRegistry    $options  Google options object.
+	 * @param   JRegistry  $options  Google options object.
 	 *
 	 * @since   1234
 	 */

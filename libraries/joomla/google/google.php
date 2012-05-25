@@ -12,12 +12,12 @@ defined('JPATH_PLATFORM') or die;
 /**
  * Joomla Platform class for interacting with the Google APIs.
  *
- * @property-read  JGoogleDate    $gists    Google API object for gists.
+ * @property-read  JGoogleDate    $gists   Google API object for gists.
  * @property-read  JGoogleEmbed   $embed   Google API object for embed generation.
  *
  * @package     Joomla.Platform
  * @subpackage  Google
- * @since       XXX
+ * @since       1234
  */
 class JGoogle
 {
@@ -48,8 +48,8 @@ class JGoogle
 	/**
 	 * Constructor.
 	 *
-	 * @param   JRegistry    $options  Google options object.
-	 * @param   JHttp  $client   The HTTP client object.
+	 * @param   JRegistry  $options  Google options object.
+	 * @param   JHttp      $client   The HTTP client object.
 	 *
 	 * @since   1234
 	 */
