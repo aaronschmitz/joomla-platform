@@ -31,6 +31,12 @@ class JOauth2client
 	protected $client;
 
 	/**
+	 * @var    JInput  The input object to use in retrieving GET/POST data.
+	 * @since  1234
+	 */
+	protected $input;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   JRegistry  $options  OAuth2Client options object.
@@ -42,6 +48,7 @@ class JOauth2client
 	{
 		$this->options = isset($options) ? $options : new JRegistry;
 		$this->client  = isset($client) ? $client : new JHttp($this->options);
+		$this->input = JFactory::getApplication()->input;
 	}
 
 	/**
@@ -53,13 +60,12 @@ class JOauth2client
 	 */
 	public function auth()
 	{
-		if (array_key_exists($_GET, 'code'))
+		if ($data['code'] = $this->input->get('code'))
 		{
 			$data['grant_type'] = 'authorization_code';
-			$data['redirect_uri'] = getOption('redirect');
-			$data['client_id'] = getOption('clientid');
-			$data['client_secret'] = getOption('clientsecret');
-			$data['code'] = $_GET['code'];
+			$data['redirect_uri'] = $this->getOption('redirect');
+			$data['client_id'] = $this->getOption('clientid');
+			$data['client_secret'] = $this->getOption('clientsecret');
 			$response = $this->client->post($this->getOption('redirect'), $data);
 
 			if ($response->code == 200)
@@ -97,11 +103,11 @@ class JOauth2client
 			return false;
 		}
 		$url .= '?response_type=code';
-		$url .= '&redircet_uri=' . urlencode(getOption('redirect'));
-		$url .= '&client_id=' . urlencode(getOption('clientid'));
-		$url .= '&scope=' . urlencode(getOption('scope'));
-		$url .= 'access_type' . urlencode(getOption('accesstype'));
-		$url .= 'approval_prompt' . urlencode(getOption('prompt'));
+		$url .= '&redircet_uri=' . urlencode($this->getOption('redirect'));
+		$url .= '&client_id=' . urlencode($this->getOption('clientid'));
+		$url .= '&scope=' . urlencode($this->getOption('scope'));
+		$url .= 'access_type' . urlencode($this->getOption('accesstype'));
+		$url .= 'approval_prompt' . urlencode($this->getOption('prompt'));
 
 		return $url;
 	}
