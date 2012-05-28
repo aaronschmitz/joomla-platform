@@ -70,13 +70,13 @@ class JOauth2client
 
 			if ($response->code == 200)
 			{
-				$this->setToken($response->body);
-				$this->setOption('accesstokentime', time());
-				return $this->getToken();
+				$token = array_merge(json_decode($response->body, true), array('created' => time()));
+				$this->setToken($token);
+				return $token;
 			}
 			else
 			{
-			// Exception
+				// Exception
 			}
 		}
 
@@ -87,7 +87,7 @@ class JOauth2client
 	/**
 	 * Create the URL for authentication.
 	 *
-	 * @return  string  The URL.
+	 * @return  JHttpResponse  The HTTP response.
 	 *
 	 * @since   1234
 	 */
@@ -110,6 +110,48 @@ class JOauth2client
 		$url .= 'approval_prompt' . urlencode($this->getOption('prompt'));
 
 		return $url;
+	}
+
+	/**
+	 * Send a signed Oauth request.
+	 *
+	 * @param   string  $url      The URL for the request.
+	 * @param   mixed   $data     The data to include in the request.
+	 * @param   array   $headers  The headers to send with the request.
+     *
+	 * @return  string  The URL.
+	 *
+	 * @since   1234
+	 */
+	public function query($url, $data = null, $headers = null)
+	{
+		if (!$headers)
+		{
+			$headers = Array();
+		}
+
+		if ($this->getOption('devkey') && !strpos($url, '?key=') && !strpos($url, '&key='))
+		{
+			if (strpos($url, '?'))
+			{
+				$url .= '&';
+			}
+			else
+			{
+				$url .= '?';
+			}
+
+			$url .= 'key=' . $this->getOption('devkey');
+		}
+
+		$token = $this->getOption('accesstoken');
+		if ($token['created'] + $token['expires_in'] < time() + 20)
+		{
+			$token = $this->refreshToken($token['refresh_token']);
+		}
+
+		$headers['Authorization'] = 'Bearer ' . $token['access_token'];
+		return $this->client->post($url, $data, $headers);
 	}
 
 	/**
@@ -145,7 +187,7 @@ class JOauth2client
 	/**
 	 * Get the access token from the JOauth2client instance.
 	 *
-	 * @return  string  The option value.
+	 * @return  array  The access token.
 	 *
 	 * @since   1234
 	 */
@@ -157,7 +199,7 @@ class JOauth2client
 	/**
 	 * Set an option for the JOauth2client instance.
 	 *
-	 * @param   string  $value  The option value to set.
+	 * @param   array  $value  The access token.
 	 *
 	 * @return  JOauth2client  This object for method chaining.
 	 *
@@ -167,5 +209,34 @@ class JOauth2client
 	{
 		$this->options->set('accesstoken', $value);
 		return $this;
+	}
+
+	/**
+	 * Refresh the access token instance.
+	 *
+	 * @param   string  $token  The refresh token.
+	 *
+	 * @return  array  The new access token.
+	 *
+	 * @since   1234
+	 */
+	public function refreshToken($token)
+	{
+		$data['grant_type'] = 'refresh_token';
+		$data['refresh_token'] = $token;
+		$data['client_id'] = $this->getOption('clientid');
+		$data['client_secret'] = $this->getOption('clientsecret');
+		$response = $this->client->post($this->getOption('refreshurl'), $data);
+
+		if ($response->code == 200)
+		{
+			$token = array_merge(json_decode($response->body, true), array('created' => time()));
+			$this->setToken($token);
+			return $token;
+		}
+		else
+		{
+			// Exception
+		}
 	}
 }

@@ -18,23 +18,6 @@ defined('JPATH_PLATFORM') or die;
  */
 abstract class JGoogleAuth
 {
-	/**
-	 * @var    JRegistry  Options for the Google object.
-	 * @since  1234
-	 */
-	protected $options;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param   JRegistry  $options  Google authentication object.
-	 *
-	 * @since   1234
-	 */
-	public function __construct(JRegistry $options = null)
-	{
-		$this->options = isset($options) ? $options : new JRegistry;
-	}
 
 	/**
 	 * Abstract method to authenticate to Google
@@ -43,7 +26,7 @@ abstract class JGoogleAuth
 	 *
 	 * @since   1234
 	 */
-	abstract public function authenticate();
+	abstract public function auth();
 
 	/**
 	 * Abstract method to retrieve data from Google
@@ -53,35 +36,4 @@ abstract class JGoogleAuth
 	 * @since   1234
 	 */
 	abstract public function query();
-
-	/**
-	 * Get an option from the JGoogleAuth instance.
-	 *
-	 * @param   string  $key  The name of the option to get.
-	 *
-	 * @return  mixed  The option value.
-	 *
-	 * @since   1234
-	 */
-	public function getOption($key)
-	{
-		return $this->options->get($key);
-	}
-
-	/**
-	 * Set an option for the JGoogleAuth instance.
-	 *
-	 * @param   string  $key    The name of the option to set.
-	 * @param   mixed   $value  The option value to set.
-	 *
-	 * @return  JGoogleAuth  This object for method chaining.
-	 *
-	 * @since   1234
-	 */
-	public function setOption($key, $value)
-	{
-		$this->options->set($key, $value);
-
-		return $this;
-	}
 }
