@@ -17,14 +17,8 @@ jimport('joomla.oauth.oauth');
  * @subpackage  Google
  * @since       1234
  */
-class JGoogleAuthOauth extends JGoogleAuth
+class JGoogleAuthOauth2 extends JGoogleAuth
 {
-	/**
-	 * @var    JRegistry  Options for the Google authentication object.
-	 * @since  1234
-	 */
-	protected $options;
-
 	/**
 	 * @var    JOauth2client  OAuth client for the Google authentication object.
 	 * @since  1234
@@ -34,13 +28,15 @@ class JGoogleAuthOauth extends JGoogleAuth
 	/**
 	 * Constructor.
 	 *
-	 * @param   JOauth2client  $client  OAuth client for Google authentication.
+	 * @param   JRegistry      $options  JGoogleAuth options object.
+	 * @param   JOauth2client  $client   OAuth client for Google authentication.
 	 *
 	 * @since   1234
 	 */
-	public function __construct(JOauth2client $client = null)
+	public function __construct(JRegistry $options = null, JOauth2client $client = null)
 	{
-		$this->client = isset($client) ? $client : new JOauth2client;
+		$this->options = isset($options) ? $options : new JRegistry;
+		$this->client = isset($client) ? $client : new JOauth2client($this->options);
 	}
 
 	/**
@@ -52,6 +48,7 @@ class JGoogleAuthOauth extends JGoogleAuth
 	 */
 	public function auth()
 	{
+		$this->googlize();
 		$this->client->auth();
 	}
 
@@ -68,37 +65,42 @@ class JGoogleAuthOauth extends JGoogleAuth
 	 */
 	public function query($url, $data = null, $headers = null)
 	{
-		$this->client->query($url, $data, $headers);
+		$this->googlize();
+		return $this->client->query($url, $data, $headers);
 	}
 
 	/**
-	 * Get an option from the Oauth2client instance.
+	 * Method to fill in Google-specific OAuth settings
 	 *
-	 * @param   string  $key  The name of the option to get.
-	 *
-	 * @return  mixed  The option value.
+	 * @return  JOauth2client  Google-configured Oauth2 client.
 	 *
 	 * @since   1234
 	 */
-	public function getOption($key)
+	protected function googlize()
 	{
-		return $this->client->getOption($key);
-	}
+		if (!$this->client->getOption('authurl'))
+		{
+			$this->client->setOption('authurl', 'https://accounts.google.com/o/oauth2/auth');
+		}
+		if (!$this->client->getOption('refreskurl'))
+		{
+			$this->client->setOption('refreshurl', 'https://accounts.google.com/o/oauth2/token');
+		}
+		if (!$this->client->getOption('requestparams'))
+		{
+			$this->client->setOption('requestparams', Array());
+		}
+		$params = $this->client->getOption('requestparams');
+		if (!array_key_exists('access_type', $params))
+		{
+			$params['access_type'] = 'offline';
+		}
+		if (!array_key_exists('approval_prompt', $params))
+		{
+			$params['approval_prompt'] = 'auto';
+		}
+		$this->client->setOption('requestparams', $params);
 
-	/**
-	 * Set an option for the Oauth2client instance.
-	 *
-	 * @param   string  $key    The name of the option to set.
-	 * @param   mixed   $value  The option value to set.
-	 *
-	 * @return  JGoogleAuthOauth  This object for method chaining.
-	 *
-	 * @since   1234
-	 */
-	public function setOption($key, $value)
-	{
-		$this->client->setOption($key, $value);
-
-		return $this;
+		return $this->client;
 	}
 }
