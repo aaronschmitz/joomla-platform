@@ -8,6 +8,7 @@
  */
 
 defined('JPATH_PLATFORM') or die;
+jimport('joomla.environment.response');
 
 /**
  * Joomla Platform class for interacting with an OAuth 2.0 server.
@@ -67,7 +68,7 @@ class JOauth2client
 			$data['redirect_uri'] = $this->getOption('redirecturi');
 			$data['client_id'] = $this->getOption('clientid');
 			$data['client_secret'] = $this->getOption('clientsecret');
-			$response = $this->client->post($this->getOption('redirecturi'), $data);
+			$response = $this->client->post($this->getOption('tokenurl'), $data);
 
 			if ($response->code == 200)
 			{
@@ -81,7 +82,7 @@ class JOauth2client
 			}
 		}
 
-		header('Location: ' . $this->createUrl());
+		JResponse::setHeader('Location', $this->createUrl(), true);
 		return false;
 	}
 
@@ -171,7 +172,7 @@ class JOauth2client
 			$url .= 'key=' . $this->getOption('devkey');
 		}
 
-		$token = $this->getOption('accesstoken');
+		$token = $this->getToken();
 		if ($token['created'] + $token['expires_in'] < time() + 20)
 		{
 			if (!array_key_exists('refresh_token', $token))
@@ -224,7 +225,7 @@ class JOauth2client
 	 */
 	public function getToken()
 	{
-		return $this->options->get('accesstoken');
+		return $this->getOption('accesstoken');
 	}
 
 	/**
@@ -238,7 +239,7 @@ class JOauth2client
 	 */
 	public function setToken($value)
 	{
-		$this->options->set('accesstoken', $value);
+		$this->setOption('accesstoken', $value);
 		return $this;
 	}
 
@@ -251,13 +252,18 @@ class JOauth2client
 	 *
 	 * @since   1234
 	 */
-	public function refreshToken($token)
+	public function refreshToken($token = null)
 	{
+		if (!$token)
+		{
+			$token = $this->getToken();
+			$token = $token['refresh_token'];
+		}
 		$data['grant_type'] = 'refresh_token';
 		$data['refresh_token'] = $token;
 		$data['client_id'] = $this->getOption('clientid');
 		$data['client_secret'] = $this->getOption('clientsecret');
-		$response = $this->client->post($this->getOption('refreshurl'), $data);
+		$response = $this->client->post($this->getOption('tokenurl'), $data);
 
 		if ($response->code == 200)
 		{

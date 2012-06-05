@@ -7,12 +7,12 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM.'/joomla/google/google.php';
+require_once JPATH_PLATFORM . '/joomla/google/google.php';
 
 /**
  * Test class for JGoogle.
  */
-class JGoogleTest extends PHPUnit_Framework_TestCase
+class JGoogleTest extends TestCase
 {
 	/**
 	 * @var    JRegistry  Options for the JOauth2client object.

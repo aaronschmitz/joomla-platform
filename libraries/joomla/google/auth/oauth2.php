@@ -8,7 +8,7 @@
  */
 
 defined('JPATH_PLATFORM') or die;
-jimport('joomla.oauth.oauth');
+jimport('joomla.oauth.oauth2');
 
 /**
  * Google OAuth authentication class
@@ -82,9 +82,9 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 		{
 			$this->client->setOption('authurl', 'https://accounts.google.com/o/oauth2/auth');
 		}
-		if (!$this->client->getOption('refreskurl'))
+		if (!$this->client->getOption('tokenurl'))
 		{
-			$this->client->setOption('refreshurl', 'https://accounts.google.com/o/oauth2/token');
+			$this->client->setOption('tokenurl', 'https://accounts.google.com/o/oauth2/token');
 		}
 		if (!$this->client->getOption('requestparams'))
 		{

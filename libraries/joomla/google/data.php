@@ -35,7 +35,7 @@ abstract class JGoogleData
 	public function __construct(JRegistry $options = null, JGoogleAuth $client = null)
 	{
 		$this->options = isset($options) ? $options : new JRegistry;
-		$this->auth = isset($auth) ? $auth : new JGoogleAuth($this->options);
+		$this->auth = isset($auth) ? $auth : new JGoogleAuthOauth2($this->options);
 	}
 
 	/**
