@@ -19,6 +19,12 @@ defined('JPATH_PLATFORM') or die;
 abstract class JGoogleData
 {
 	/**
+	 * @var    JRegistry  Options for the Google data object.
+	 * @since  1234
+	 */
+	protected $options;
+
+	/**
 	 * @var    JGoogleAuth  Authentication client for the Google data object.
 	 * @since  1234
 	 */
@@ -28,11 +34,11 @@ abstract class JGoogleData
 	 * Constructor.
 	 *
 	 * @param   JRegistry    $options  Google options object.
-	 * @param   JGoogleAuth  $client   Google data http client object.
+	 * @param   JGoogleAuth  $auth     Google data http client object.
 	 *
 	 * @since   1234
 	 */
-	public function __construct(JRegistry $options = null, JGoogleAuth $client = null)
+	public function __construct(JRegistry $options = null, JGoogleAuth $auth = null)
 	{
 		$this->options = isset($options) ? $options : new JRegistry;
 		$this->auth = isset($auth) ? $auth : new JGoogleAuthOauth2($this->options);

@@ -68,19 +68,19 @@ class JGoogle
 	 *
 	 * @since   1234
 	 */
-	public function data($name)
+	public function data($name, $options = null, $auth = null)
 	{
 		switch ($name)
 		{
 			case 'picasa':
 			case 'Picasa':
-				return new JGoogleDataPicasa;
+				return new JGoogleDataPicasa($options, $auth);
 			case 'adsense':
 			case 'Adsense':
-				return new JGoogleDataAdsense;
+				return new JGoogleDataAdsense($options, $auth);
 			case 'calendar':
 			case 'Calendar':
-				return new JGoogleDataCalendar;
+				return new JGoogleDataCalendar($options, $auth);
 			default:
 				return null;
 		}
@@ -95,16 +95,16 @@ class JGoogle
 	 *
 	 * @since   1234
 	 */
-	public function embed($name)
+	public function embed($name, $options)
 	{
 		switch ($name)
 		{
 			case 'maps':
 			case 'Maps':
-				return new JGoogleEmbedMaps;
+				return new JGoogleEmbedMaps($options);
 			case 'analytics':
 			case 'Analytics':
-				return new JGoogleEmbedAnalytics;
+				return new JGoogleEmbedAnalytics($options);
 			default:
 				return null;
 		}

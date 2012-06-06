@@ -16,25 +16,21 @@ class JOauth2clientTest extends TestCase
 {
 	/**
 	 * @var    JRegistry  Options for the JOauth2client object.
-	 * @since  1234
 	 */
 	protected $options;
 
 	/**
 	 * @var    JHttp  Mock client object.
-	 * @since  1234
 	 */
 	protected $client;
 
 	/**
 	 * @var    JInput  The input object to use in retrieving GET/POST data.
-	 * @since  1234
 	 */
 	protected $input;
 
 	/**
 	 * @var    JOauth2client  Object under test.
-	 * @since  1234
 	 */
 	protected $object;
 
@@ -64,7 +60,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the auth method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testAuth()
 	{
@@ -100,7 +97,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the auth method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testCreateUrl()
 	{
@@ -122,7 +120,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the auth method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testQuery()
 	{
@@ -140,7 +139,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the setOption method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testSetOption()
 	{
@@ -154,7 +154,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the getOption method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testGetOption()
 	{
@@ -168,7 +169,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the setToken method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testSetToken()
 	{
@@ -182,7 +184,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the getToken method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testGetToken()
 	{
@@ -196,7 +199,8 @@ class JOauth2clientTest extends TestCase
 
 	/**
 	 * Tests the refreshToken method
-	 * @since  1234
+	 * @group	JOauth2client
+	 * @return void
 	 */
 	public function testRefreshToken()
 	{
@@ -216,7 +220,6 @@ class JOauth2clientTest extends TestCase
 
 /**
  * Callback for the use of JHttp to return a token
- * @since  1234
  */
 function httpTokenCallback($url, $data)
 {
@@ -227,7 +230,6 @@ function httpTokenCallback($url, $data)
 
 /**
  * Callback for the use of JHttp to return a response to an OAuth request
- * @since  1234
  */
 function httpQueryCallback($url, $data)
 {

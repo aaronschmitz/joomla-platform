@@ -40,7 +40,7 @@ abstract class JGoogleAuth
 	 *
 	 * @since   1234
 	 */
-	abstract public function query();
+	abstract public function query($url, $data = null, $headers = null);
 
 	/**
 	 * Get an option from the JGoogleAuth object.

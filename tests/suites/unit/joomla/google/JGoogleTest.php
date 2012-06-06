@@ -16,19 +16,31 @@ class JGoogleTest extends TestCase
 {
 	/**
 	 * @var    JRegistry  Options for the JOauth2client object.
-	 * @since  1234
 	 */
 	protected $options;
 
 	/**
 	 * @var    JHttp  Mock client object.
-	 * @since  1234
 	 */
 	protected $client;
 
 	/**
+	 * @var    JInput  The input object to use in retrieving GET/POST data.
+	 */
+	protected $input;
+
+	/**
+	 * @var    JOauth2client  The OAuth client for sending requests to Google.
+	 */
+	protected $oauth;
+
+	/**
+	 * @var    JGoogleAuth  The authentication wrapper for sending requests to Google.
+	 */
+	protected $auth;
+
+	/**
 	 * @var    JGoogle  Object under test.
-	 * @since  1234
 	 */
 	protected $object;
 
@@ -42,6 +54,9 @@ class JGoogleTest extends TestCase
 	{
 		$this->options = new JRegistry;
 		$this->client = $this->getMock('JHttp', array('post'));
+		$this->input = new JInput;
+        $this->oauth = new JOauth2client($this->options, $this->client, $this->input);
+        $this->auth = new JGoogleAuthOauth2($this->options, $this->oauth);
 		$this->object = new JGoogle($this->options, $this->client);
 	}
 
@@ -57,31 +72,34 @@ class JGoogleTest extends TestCase
 
 	/**
 	 * Tests the magic __get method - data
-	 * @since  1234
+	 * @group	JGoogle
+	 * @return void
 	 */
 	public function test__GetData()
 	{
 		$this->assertThat(
-			$this->object->data('Picasa'),
+			$this->object->data('Picasa', $this->options, $this->auth),
 			$this->isInstanceOf('JGoogleDataPicasa')
 		);
 	}
 
 	/**
 	 * Tests the magic __get method - embed
-	 * @since  1234
+	 * @group	JGoogle
+	 * @return void
 	 */
 	public function test__GetEmbed()
 	{
 		$this->assertThat(
-			$this->object->embed('Maps'),
+			$this->object->embed('Maps', $this->options),
 			$this->isInstanceOf('JGoogleEmbedMaps')
 		);
 	}
 
 	/**
 	 * Tests the setOption method
-	 * @since  1234
+	 * @group	JGoogle
+	 * @return void
 	 */
 	public function testSetOption()
 	{
@@ -95,7 +113,8 @@ class JGoogleTest extends TestCase
 
 	/**
 	 * Tests the getOption method
-	 * @since  1234
+	 * @group	JGoogle
+	 * @return void
 	 */
 	public function testGetOption()
 	{
