@@ -7,15 +7,13 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM.'/joomla/log/loggers/syslog.php';
-
 /**
- * Test class for JLoggerSysLog.
+ * Test class for JLogLoggerSysLog.
  */
-class JLoggerSysLogTest extends PHPUnit_Framework_TestCase
+class JLogLoggerSysLogTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the JLoggerSysLog::addEntry method.
+	 * Test the JLogLoggerSysLog::addEntry method.
 	 */
 	public function testAddEntry()
 	{

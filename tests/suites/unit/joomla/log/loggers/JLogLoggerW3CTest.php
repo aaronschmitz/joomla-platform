@@ -7,16 +7,15 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM.'/joomla/log/loggers/w3c.php';
 require_once __DIR__.'/stubs/w3c/inspector.php';
 
 /**
- * Test class for JLoggerW3C.
+ * Test class for JLogLoggerW3C.
  */
-class JLoggerW3CTest extends PHPUnit_Framework_TestCase
+class JLogLoggerW3CTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the JLoggerW3C::addEntry method.
+	 * Test the JLogLoggerW3C::addEntry method.
 	 */
 	public function testAddEntry()
 	{
@@ -24,7 +23,7 @@ class JLoggerW3CTest extends PHPUnit_Framework_TestCase
 		$config = array(
 			'text_file_path' => JPATH_TESTS.'/tmp',
 		);
-		$logger = new JLoggerW3CInspector($config);
+		$logger = new JLogLoggerW3CInspector($config);
 
 		// Remove the log file if it exists.
 		@ unlink($logger->path);

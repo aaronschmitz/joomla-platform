@@ -7,13 +7,12 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM.'/joomla/log/loggers/database.php';
 require_once __DIR__.'/stubs/database/inspector.php';
 
 /**
- * Test class for JLoggerDatabase.
+ * Test class for JLogLoggerDatabase.
  */
-class JLoggerDatabaseTest extends TestCaseDatabase
+class JLogLoggerDatabaseTest extends TestCaseDatabase
 {
 	/**
 	 * Gets the data set to be loaded into the database during setup
@@ -26,7 +25,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test the JLoggerDatabase::__construct method.
+	 * Test the JLogLoggerDatabase::__construct method.
 	 */
 	public function testConstructor01()
 	{
@@ -35,7 +34,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 			'db_driver' => 'mysqli',
 			'db_host' => 'db.domain.com'
 		);
-		$logger = new JLoggerDatabaseInspector($config);
+		$logger = new JLogLoggerDatabaseInspector($config);
 
 		// Verify some internal values.
 		$this->assertEquals($logger->driver, 'mysqli', 'Line: '.__LINE__);
@@ -45,13 +44,13 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test the JLoggerDatabase::addEntry method.
+	 * Test the JLogLoggerDatabase::addEntry method.
 	 */
 	public function testAddEntry01()
 	{
 		// Setup the basic configuration.
 		$config = array();
-		$logger = new JLoggerDatabaseInspector($config);
+		$logger = new JLogLoggerDatabaseInspector($config);
 
 		// Get the expected database from XML.
 		$expected = $this->createXMLDataSet(__DIR__.'/stubs/database/S01E01.xml');
@@ -69,7 +68,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test the JLoggerDatabase::addEntry method.
+	 * Test the JLogLoggerDatabase::addEntry method.
 	 */
 	public function testAddEntry02()
 	{
@@ -79,7 +78,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 			'db_database' => ':memory:',
 			'db_prefix' => 'jos_'
 		);
-		$logger = new JLoggerDatabase($config);
+		$logger = new JLogLoggerDatabase($config);
 		TestReflection::setValue($logger, 'dbo', JFactory::$database);
 
 		// Get the expected database from XML.
@@ -98,7 +97,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test the JLoggerDatabase::connect method.
+	 * Test the JLogLoggerDatabase::connect method.
 	 */
 	public function testConnect01()
 	{
@@ -109,14 +108,14 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 			'db_prefix' => 'jos_'
 		);
 
-		$logger = new JLoggerDatabaseInspector($config);
+		$logger = new JLogLoggerDatabaseInspector($config);
 		$logger->connect();
 
 		$this->assertTrue($logger->dbo instanceof JDatabaseDriver, 'Line: '.__LINE__);
 	}
 
 	/**
-	 * Failing test for the JLoggerDatabase::connect method.
+	 * Failing test for the JLogLoggerDatabase::connect method.
 	 *
 	 * @return  void
 	 *
@@ -134,7 +133,7 @@ class JLoggerDatabaseTest extends TestCaseDatabase
 			'db_prefix' => 'blah_'
 		);
 
-		$logger = new JLoggerDatabaseInspector($config);
+		$logger = new JLogLoggerDatabaseInspector($config);
 		$logger->connect();
 	}
 }

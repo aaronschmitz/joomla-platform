@@ -9,7 +9,6 @@
 
 defined('JPATH_PLATFORM') or die;
 
-jimport('joomla.log.logger');
 jimport('joomla.filesystem.folder');
 
 /**
@@ -22,7 +21,7 @@ jimport('joomla.filesystem.folder');
  * @subpackage  Log
  * @since       11.1
  */
-class JLoggerFormattedtext extends JLogger
+class JLogLoggerFormattedtext extends JLogLogger
 {
 	/**
 	 * @var    resource  The file pointer for the log file.
@@ -152,11 +151,11 @@ class JLoggerFormattedtext extends JLogger
 			$entry->date = $entry->date->format('Y-m-d', false);
 		}
 
-		// Decode the entry priority into an English string.
-		$entry->priority = $this->priorities[$entry->priority];
-
 		// Get a list of all the entry keys and make sure they are upper case.
 		$tmp = array_change_key_case(get_object_vars($entry), CASE_UPPER);
+
+		// Decode the entry priority into an English string.
+		$tmp['PRIORITY'] = $this->priorities[$entry->priority];
 
 		// Fill in field data for the line.
 		$line = $this->format;
