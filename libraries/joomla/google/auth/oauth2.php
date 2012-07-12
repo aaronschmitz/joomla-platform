@@ -53,6 +53,18 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	}
 
 	/**
+	 * Verify if the client has been authenticated
+	 *
+	 * @return  bool  Is authenticated
+	 *
+	 * @since   1234
+	 */
+	public function isAuth()
+	{
+		return $this->client->isAuth();
+	}
+
+	/**
 	 * Method to retrieve data from Google
 	 *
 	 * @param   string  $url      The URL for the request.

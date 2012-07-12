@@ -78,7 +78,7 @@ class JOauthOauth2client
 			$data['client_secret'] = $this->getOption('clientsecret');
 			$response = $this->http->post($this->getOption('tokenurl'), $data);
 
-			if ($response->code == 200)
+			if ($response->code >= 200 && $response->code < 300)
 			{
 				$token = array_merge(json_decode($response->body, true), array('created' => time()));
 				$this->setToken($token);
@@ -92,6 +92,19 @@ class JOauthOauth2client
 
 		JResponse::setHeader('Location', $this->createUrl(), true);
 		return false;
+	}
+
+	/**
+	 * Verify if the client has been authenticated
+	 *
+	 * @return  bool  Is authenticated
+	 *
+	 * @since   1234
+	 */
+	public function isAuth()
+	{
+		$token = $this->getToken();
+		return !empty($token);
 	}
 
 	/**
@@ -195,7 +208,7 @@ class JOauthOauth2client
 		$headers['Authorization'] = 'Bearer ' . $token['access_token'];
 		$response = $this->client->request($method, new JURI($url), $data, $headers, $timeout);
 
-		if ($response->code != 200)
+		if ($response->code < 200 || $response->code >= 300)
 		{
 			throw new RuntimeException('Error code ' . $response->code . ' received requesting data: ' . $response->body . '.');
 		}
@@ -281,7 +294,7 @@ class JOauthOauth2client
 		$data['client_secret'] = $this->getOption('clientsecret');
 		$response = $this->http->post($this->getOption('tokenurl'), $data);
 
-		if ($response->code == 200)
+		if ($response->code >= 200 || $response->code < 300)
 		{
 			$token = array_merge(json_decode($response->body, true), array('created' => time()));
 			$this->setToken($token);
