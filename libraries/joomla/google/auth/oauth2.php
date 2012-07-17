@@ -103,15 +103,21 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 		{
 			$this->client->setOption('requestparams', Array());
 		}
+
 		$params = $this->client->getOption('requestparams');
 		if (!array_key_exists('access_type', $params))
 		{
 			$params['access_type'] = 'offline';
 		}
+		if ($params['access_type'] == 'offline' && $this->client->getOption('userefresh') === null)
+		{
+			$this->client->setOption('userefresh', true);
+		}
 		if (!array_key_exists('approval_prompt', $params))
 		{
 			$params['approval_prompt'] = 'auto';
 		}
+
 		$this->client->setOption('requestparams', $params);
 
 		return $this->client;
