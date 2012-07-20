@@ -188,7 +188,7 @@ class JOauthOauth2client
 	 *
 	 * @since   1234
 	 */
-	public function query($url, $data = null, $headers = array(), $method = 'post', $timeout = null)
+	public function query($url, $data = null, $headers = array(), $method = 'get', $timeout = null)
 	{
 		$token = $this->getToken();
 		if (array_key_exists('expires_in', $token) && $token['created'] + $token['expires_in'] < time() + 20)
@@ -214,7 +214,7 @@ class JOauthOauth2client
 			{
 				$url .= '?';
 			}
-			$url .= $this->getOption('getparam') ? $this->getOption('getparam') : 'accesstoken';
+			$url .= $this->getOption('getparam') ? $this->getOption('getparam') : 'access_token';
 			$url .= '=' . $token['access_token'];
 		}
 

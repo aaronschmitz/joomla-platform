@@ -56,7 +56,7 @@ class JGoogleDataPicasa extends JGoogleData
 		if ($this->authenticated())
 		{
 			$url = 'https://picasaweb.google.com/data/feed/api/user/' . $userID;
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2), 'get');
+			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
 			if (isset($xml->children()->entry))
 			{
@@ -138,7 +138,7 @@ class JGoogleDataPicasa extends JGoogleData
 	{
 		if ($this->authenticated())
 		{
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2), 'get');
+			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
             return new JGoogleDataPicasaAlbum($xml, $this->options, $this->auth);
 		}

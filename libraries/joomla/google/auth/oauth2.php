@@ -76,7 +76,7 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	 *
 	 * @since   1234
 	 */
-	public function query($url, $data = null, $headers = null, $method = 'post')
+	public function query($url, $data = null, $headers = null, $method = 'get')
 	{
 		$this->googlize();
 		return $this->client->query($url, $data, $headers, $method);

@@ -314,7 +314,7 @@ class JGoogleDataPicasaAlbum extends JGoogleData
 		if ($this->authenticated())
 		{
 			$url = $this->getLink();
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2), 'get');
+			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
 			$this->xml = $this->safeXML($jdata->body);echo $jdata->body;
 			return $this;
 		}
@@ -337,7 +337,7 @@ class JGoogleDataPicasaAlbum extends JGoogleData
 		if ($this->authenticated())
 		{
 			$url = $this->getLink('http://schemas.google.com/g/2005#feed');
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2), 'get');
+			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
 			if (isset($xml->children()->entry))
 			{
