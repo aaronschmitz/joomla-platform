@@ -100,7 +100,7 @@ class JOauthOauth2client
 			}
 		}
 
-        if ($this->getOption('sendheaders'));
+		if ($this->getOption('sendheaders'))
 		{
 			JResponse::setHeader('Location', $this->createUrl(), true);
 			JResponse::sendHeaders();
@@ -200,7 +200,24 @@ class JOauthOauth2client
 			$token = $this->refreshToken($token['refresh_token']);
 		}
 
-		$headers['Authorization'] = 'Bearer ' . $token['access_token'];
+		if (!$this->getOption('authmethod') || $this->getOption('authmethod') == 'bearer')
+		{
+			$headers['Authorization'] = 'Bearer ' . $token['access_token'];
+		}
+		elseif ($this->getOption('authmethod') == 'get')
+		{
+			if (strpos($url, '?'))
+			{
+				$url .= '&';
+			}
+			else
+			{
+				$url .= '?';
+			}
+			$url .= $this->getOption('getparam') ? $this->getOption('getparam') : 'accesstoken';
+			$url .= '=' . $token['access_token'];
+		}
+
 		$response = $this->client->request($method, new JURI($url), $data, $headers, $timeout);
 
 		if ($response->code < 200 || $response->code >= 300)
@@ -306,7 +323,16 @@ class JOauthOauth2client
 
 		if ($response->code >= 200 || $response->code < 300)
 		{
-			$token = array_merge(json_decode($response->body, true), array('created' => time()));
+			if ($response->headers['Content-Type'] == 'application/json')
+			{
+				$token = array_merge(json_decode($response->body, true), array('created' => time()));
+			}
+			else
+			{
+				parse_str($response->body, $token);
+				$token = array_merge($token, array('created' => time()));
+			}
+
 			$this->setToken($token);
 			return $token;
 		}
