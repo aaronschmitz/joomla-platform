@@ -197,7 +197,6 @@ class JGoogleDataPicasaPhoto extends JGoogleData
 	public function getTime()
 	{
 		return (int) $this->xml->children('gphoto', true)->timestamp;
-		return $this;
 	}
 
 	/**
