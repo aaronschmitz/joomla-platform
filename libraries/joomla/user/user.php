@@ -138,6 +138,22 @@ class JUser extends JObject
 	public $guest = null;
 
 	/**
+	 * Last Reset Time
+	 *
+	 * @var    string
+	 * @since  12.2
+	 */
+	public $lastResetTime = null;
+
+	/**
+	 * Count since last Reset Time
+	 *
+	 * @var    int
+	 * @since  12.2
+	 */
+	public $resetCount = null;
+
+	/**
 	 * User parameters
 	 * @var    object
 	 * @since  11.1
@@ -588,9 +604,6 @@ class JUser extends JObject
 				$array['password'] = $this->password;
 			}
 		}
-
-		// TODO: this will be deprecated as of the ACL implementation
-		// @todo remove code: 		$db = JFactory::getDbo();
 
 		if (array_key_exists('params', $array))
 		{

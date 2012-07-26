@@ -61,6 +61,7 @@ abstract class JFactory
 	/**
 	 * @var    JAccess
 	 * @since  11.1
+	 * @deprecated  13.3
 	 */
 	public static $acl = null;
 
@@ -341,36 +342,18 @@ abstract class JFactory
 	 * @return  mixed  SimplePie parsed object on success, false on failure.
 	 *
 	 * @since   11.1
+	 * @deprecated  13.3  Use JSimplepieFactory::getFeedParser() instead.
 	 */
 	public static function getFeedParser($url, $cache_time = 0)
 	{
-		jimport('simplepie.simplepie');
-
-		$cache = self::getCache('feed_parser', 'callback');
-
-		if ($cache_time > 0)
+		if (!class_exists('JSimplepieFactory'))
 		{
-			$cache->setLifeTime($cache_time);
+			throw new BadMethodCallException('JSimplepieFactory not found');
 		}
 
-		$simplepie = new SimplePie(null, null, 0);
+		JLog::add(__METHOD__ . ' is deprecated.   Use JSimplepieFactory::getFeedParser() instead.', JLog::WARNING, 'deprecated');
 
-		$simplepie->enable_cache(false);
-		$simplepie->set_feed_url($url);
-		$simplepie->force_feed(true);
-
-		$contents = $cache->get(array($simplepie, 'init'), null, false, false);
-
-		if ($contents)
-		{
-			return $simplepie;
-		}
-		else
-		{
-			JLog::add(JText::_('JLIB_UTIL_ERROR_LOADING_FEED_DATA'), JLog::WARNING, 'jerror');
-		}
-
-		return false;
+		return JSimplepieFactory::getFeedParser($url, $cache_time);
 	}
 
 	/**
@@ -379,19 +362,22 @@ abstract class JFactory
 	 * @param   string   $data    Full path and file name.
 	 * @param   boolean  $isFile  true to load a file or false to load a string.
 	 *
-	 * @return  mixed    JXMLElement on success or false on error.
+	 * @return  mixed    JXMLElement or SimpleXMLElement on success or false on error.
 	 *
 	 * @see     JXMLElement
 	 * @since   11.1
-	 * @note    This method will return SimpleXMLElement object in the future. Do not rely on JXMLElement's methods.
-	 * @todo    This may go in a separate class - error reporting may be improved.
+	 * @note    When JXMLElement is not present a SimpleXMLElement will be returned.
 	 * @deprecated  13.3 Use SimpleXML directly.
 	 */
 	public static function getXML($data, $isFile = true)
 	{
 		JLog::add(__METHOD__ . ' is deprecated. Use SimpleXML directly.', JLog::WARNING, 'deprecated');
 
-		jimport('joomla.utilities.xmlelement');
+		$class = 'SimpleXMLElement';
+		if (class_exists('JXMLElement'))
+		{
+			$class = 'JXMLElement';
+		}
 
 		// Disable libxml errors and allow to fetch error information as needed
 		libxml_use_internal_errors(true);
@@ -399,15 +385,15 @@ abstract class JFactory
 		if ($isFile)
 		{
 			// Try to load the XML file
-			$xml = simplexml_load_file($data, 'JXMLElement');
+			$xml = simplexml_load_file($data, $class);
 		}
 		else
 		{
 			// Try to load the XML string
-			$xml = simplexml_load_string($data, 'JXMLElement');
+			$xml = simplexml_load_string($data, $class);
 		}
 
-		if (empty($xml))
+		if ($xml === false)
 		{
 			JLog::add(JText::_('JLIB_UTIL_ERROR_XML_LOAD'), JLog::WARNING, 'jerror');
 
@@ -437,10 +423,14 @@ abstract class JFactory
 	 */
 	public static function getEditor($editor = null)
 	{
+		JLog::add(__METHOD__ . ' is deprecated. Use JEditor directly.', JLog::WARNING, 'deprecated');
+
 		if (!class_exists('JEditor'))
 		{
 			throw new BadMethodCallException('JEditor not found');
 		}
+
+		JLog::add(__METHOD__ . ' is deprecated. Use JEditor directly.', JLog::WARNING, 'deprecated');
 
 		// Get the editor configuration setting
 		if (is_null($editor))
@@ -466,8 +456,6 @@ abstract class JFactory
 	public static function getURI($uri = 'SERVER')
 	{
 		JLog::add(__METHOD__ . ' is deprecated. Use JURI directly.', JLog::WARNING, 'deprecated');
-
-		jimport('joomla.environment.uri');
 
 		return JURI::getInstance($uri);
 	}
@@ -615,20 +603,17 @@ abstract class JFactory
 
 		$options = array('driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix);
 
-		$db = JDatabaseDriver::getInstance($options);
-
-		if ($db instanceof Exception)
+		try
+		{
+			$db = JDatabaseDriver::getInstance($options);
+		}
+		catch (RuntimeException $e)
 		{
 			if (!headers_sent())
 			{
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			jexit('Database Error: ' . (string) $db);
-		}
-
-		if ($db->getErrorNum() > 0)
-		{
-			die(sprintf('Database connection error (%d): %s', $db->getErrorNum(), $db->getErrorMsg()));
+			jexit('Database Error: ' . $e->getMessage());
 		}
 
 		$db->setDebug($debug);
@@ -713,10 +698,13 @@ abstract class JFactory
 	{
 		$lang = self::getLanguage();
 
+		$input = self::getApplication()->input;
+		$type = $input->get('format', 'html', 'word');
+
 		$attributes = array('charset' => 'utf-8', 'lineend' => 'unix', 'tab' => '  ', 'language' => $lang->getTag(),
 			'direction' => $lang->isRTL() ? 'rtl' : 'ltr');
 
-		return JDocument::getInstance('html', $attributes);
+		return JDocument::getInstance($type, $attributes);
 	}
 
 	/**
