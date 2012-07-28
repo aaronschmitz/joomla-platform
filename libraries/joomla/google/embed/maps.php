@@ -388,33 +388,6 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 	}
 
 	/**
-	 * Method to get the callback function
-	 *
-	 * @return  string  The callback
-	 *
-	 * @since   1234
-	 */
-	public function getWindowCallback()
-	{
-		return $this->getOption('callback') ? $this->getOption('callback') : 'windowload';
-	}
-
-	/**
-	 * Method to set the callback function
-	 *
-	 * @param   string  $callback  The callback
-	 *
-	 * @return  JGoogleEmbedMaps  The object for method chaining
-	 *
-	 * @since   1234
-	 */
-	public function setWindowCallback($callback)
-	{
-		$this->setOption('callback', $callback);
-		return $this;
-	}
-
-	/**
 	 * Checks if the javascript is set to be asynchronous
 	 *
 	 * @return  bool  True if asynchronous
@@ -518,40 +491,29 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 	}
 
 	/**
-	 * Checks if the callback should be added to the window automatically
+	 * Checks how the script should be loaded
 	 *
-	 * @return  bool  True if we want to 
+	 * @return  string  Autoload type (onload, jquery, mootools, or false)
 	 *
 	 * @since   1234
 	 */
-	public function autoload()
+	public function getAutoload()
 	{
-		return $this->getOption('autoload') === null ? false : $this->getOption('autoload');
+		return $this->getOption('autoload') ? $this->getOption('autoload') : 'false';
 	}
 
 	/**
 	 * Automatically add the callback to the window
 	 *
-	 * @return  JGoogleEmbedMaps  The object for method chaining
-	 *
-	 * @since   1234
-	 */
-	public function setAutoload()
-	{
-		$this->setOption('autoload', true);
-		return $this;
-	}
-
-	/**
-	 * Don't automatically add the callback to the window
+	 * @param   string  $type  The method to add the callback (options are onload, jquery, mootools, and false)
 	 *
 	 * @return  JGoogleEmbedAMaps  The object for method chaining
 	 *
 	 * @since   1234
 	 */
-	public function disableAutoload()
+	public function setAutoload($type = 'onload')
 	{
-		$this->setOption('autoload', false);
+		$this->setOption('autoload', $type);
 		return $this;
 	}
 
@@ -573,7 +535,6 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 		$center = $this->getCenter();
 		$maptype = $this->getMapType();
 		$id = $this->getMapID();
-		$callback = $this->getWindowCallback();
 		$scheme = $this->isSecure() ? 'https' : 'http';
 		$key = $this->getKey();
 		$sensor = $this->hasSensor() ? 'true' : 'false';
@@ -610,27 +571,40 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 			$output .= "function {$asynccallback}() {";
 			$output .= $setup;
 			$output .= '}';
-			$output .= "function {$callback}() {";
-			$output .= 'var script = document.createElement("script");';
-			$output .= 'script.type = "text/javascript";';
-			$output .= "script.src = '{$scheme}://maps.googleapis.com/maps/api/js?key={$key}&sensor={$sensor}&callback={$asynccallback}';";
-			$output .= 'document.body.appendChild(script);';
-			$output .= '}';
+
+			$onload = "function() {";
+			$onload .= 'var script = document.createElement("script");';
+			$onload .= 'script.type = "text/javascript";';
+			$onload .= "script.src = '{$scheme}://maps.googleapis.com/maps/api/js?key={$key}&sensor={$sensor}&callback={$asynccallback}';";
+			$onload .= 'document.body.appendChild(script);';
+			$onload .= '}';
 		}
 		else
 		{
 			$output = "<script type='text/javascript' src='{$scheme}://maps.googleapis.com/maps/api/js?key={$key}&sensor={$sensor}'>";
 			$output .= '</script>';
 			$output .= '<script type="text/javascript">';
-			$output .= "function {$callback}() {";
-			$output .= $setup;
-			$output .= '}';
+
+			$onload = "function() {";
+			$onload .= $setup;
+			$onload .= '}';
 		}
 
-		if ($this->autoload())
+		switch ($this->getAutoload())
 		{
-			$output .= "window.onload = {$callback};";
+			case 'onload':
+			$output .= "window.onload = {$onload};";
+			break;
+
+			case 'jquery':
+			$output .= "$(document).ready({$onload});";
+			break;
+
+			case 'mootools':
+			$output .= "window.addEvent('domready',{$onload});";
+			break;
 		}
+
 		$output .= '</script>';
 		return $output;
 	}
