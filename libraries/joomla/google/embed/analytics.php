@@ -209,15 +209,16 @@ class JGoogleEmbedAnalytics extends JGoogleEmbed
 	 * @param   string  $category     The general event category
  	 * @param   string  $action       The event action
  	 * @param   string  $label        The event description
+ 	 * @param   string  $value        The value of the event
 	 * @param   bool    $noninteract  Don't allow this event to impact bounce statistics
 	 *
 	 * @return  array  The added call
 	 *
 	 * @since   1234
 	 */
-	public function addEvent($category, $action, $label = null, $noninteract = false)
+	public function addEvent($category, $action, $label = null, $value = null, $noninteract = false)
 	{
-		return $this->addCall('_trackEvent', array($category, $action, $label, $noninteract));
+		return $this->addCall('_trackEvent', array($category, $action, $label, $value, $noninteract));
 	}
 
 	/**
@@ -226,15 +227,16 @@ class JGoogleEmbedAnalytics extends JGoogleEmbed
 	 * @param   string  $category     The general event category
  	 * @param   string  $action       The event action
  	 * @param   string  $label        The event description
+ 	 * @param   string  $value        The value of the event
 	 * @param   bool    $noninteract  Don't allow this event to impact bounce statistics
 	 *
 	 * @return  string  The created call
 	 *
 	 * @since   1234
 	 */
-	public function createEvent($category, $action, $label = null, $noninteract = false)
+	public function createEvent($category, $action, $label = null, $value = null, $noninteract = false)
 	{
-		return $this->createCall('_trackEvent', array($category, $action, $label, $noninteract));
+		return $this->createCall('_trackEvent', array($category, $action, $label, $value, $noninteract));
 	}
 
 	/**
