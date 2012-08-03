@@ -82,6 +82,9 @@ class JGoogle
 		}
 		switch ($name)
 		{
+			case 'plus':
+			case 'Plus':
+				return new JGoogleDataPlus($options, $auth);
 			case 'picasa':
 			case 'Picasa':
 				return new JGoogleDataPicasa($options, $auth);
