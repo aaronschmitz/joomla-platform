@@ -61,7 +61,7 @@ class JGoogleDataPlusPeople extends JGoogleData
 			// Check if fields is specified.
 			if ($fields)
 			{
-				$url .= '&fields=' . $fields;
+				$url .= '?fields=' . $fields;
 			}
 
 			$jdata = $this->auth->query($url);
@@ -165,19 +165,21 @@ class JGoogleDataPlusPeople extends JGoogleData
 			// Check if fields is specified.
 			if ($fields)
 			{
-				$url .= '&fields=' . $fields;
+				$url .= '?fields=' . $fields;
 			}
 
 			// Check if max is specified.
 			if ($max != 10)
 			{
-				$url .= '&maxResults=' . $max;
+				$url .= (strpos($url, '?') === false) ? '?maxResults=' : '&maxResults=';
+				$url .= $max;
 			}
 
 			// Check of token is specified.
 			if ($token)
 			{
-				$url .= '&pageToken=' . $token;
+				$url .= (strpos($url, '?') === false) ? '?pageToken=' : '&pageToken=';
+				$url .= $token;
 			}
 
 			$jdata = $this->auth->query($url);
