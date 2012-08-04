@@ -21,8 +21,8 @@ class JGoogleDataPlusPeople extends JGoogleData
 	/**
 	 * Constructor.
 	 *
-	 * @param   JRegistry         $options  Google options object
-	 * @param   JGoogleAuth       $auth     Google data http client object
+	 * @param   JRegistry    $options  Google options object
+	 * @param   JGoogleAuth  $auth     Google data http client object
 	 *
 	 * @since   1234
 	 */
@@ -87,8 +87,8 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 * @param   string   $fields    Used to specify the fields you want returned.
 	 * @param   string   $language  Specify the preferred language to search with. https://developers.google.com/+/api/search#available-languages
 	 * @param   integer  $max       The maximum number of people to include in the response, used for paging.
-	 * @param   string   $token     The continuation token, used to page through large result sets. To get the next page of results, set this parameter to
-	 * 								the value of "nextPageToken" from the previous response. This token may be of any length.
+	 * @param   string   $token     The continuation token, used to page through large result sets. To get the next page of results, set this
+	 * 								parameter to the value of "nextPageToken" from the previous response. This token may be of any length.
 	 *
 	 * @return  mixed  Data from Google
 	 *
@@ -148,8 +148,8 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 * @param   string   $collection  The collection of people to list. Acceptable values are "plusoners" and "resharers".
 	 * @param   string   $fields      Used to specify the fields you want returned.
 	 * @param   integer  $max         The maximum number of people to include in the response, used for paging.
-	 * @param   string   $token       The continuation token, used to page through large result sets. To get the next page of results, set this parameter to
-	 * 								  the value of "nextPageToken" from the previous response. This token may be of any length.
+	 * @param   string   $token       The continuation token, used to page through large result sets. To get the next page of results, set this
+	 * 								  parameter to the value of "nextPageToken" from the previous response. This token may be of any length.
 	 *
 	 * @return  mixed  Data from Google
 	 *
