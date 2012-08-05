@@ -1,15 +1,19 @@
 <?php
 /**
- * @package     Joomla.UnitTest
+ * @package    Joomla.UnitTest
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 require_once JPATH_PLATFORM . '/joomla/google/data/adsense.php';
 
 /**
- * Test class for JGoogle.
+ * Test class for JGoogleDataAdsense.
+ *
+ * @package     Joomla.UnitTest
+ * @subpackage  Google
+ * @since       12.2
  */
 class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 {
@@ -48,6 +52,7 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @access protected
+	 * @return void
 	 */
 	protected function setUp()
 	{
@@ -58,14 +63,14 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 		$this->input = new JInput;
 		$this->oauth = new JOauthOauth2client($this->options, $this->client, $this->input);
 		$this->auth = new JGoogleAuthOauth2($this->options, $this->oauth);
-        $this->object = new JGoogleDataAdsense($this->options, $this->auth);
+		$this->object = new JGoogleDataAdsense($this->options, $this->auth);
 	}
 
 	/**
 	 * Tears down the fixture, for example, closes a network connection.
 	 * This method is called after a test is executed.
 	 *
-	 * @access protected
+	 * @return void
 	 */
 	protected function tearDown()
 	{

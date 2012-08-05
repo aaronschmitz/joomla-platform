@@ -8,7 +8,7 @@
  */
 
 defined('JPATH_PLATFORM') or die;
-jimport('joomla.oauth.oauth2client');
+jimport('joomla.oauth.2client');
 
 /**
  * Google OAuth authentication class
@@ -33,10 +33,10 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	 *
 	 * @since   1234
 	 */
-	public function __construct(JRegistry $options = null, JOauthOauth2client $client = null)
+	public function __construct(JRegistry $options = null, JOauth2client $client = null)
 	{
 		$this->options = isset($options) ? $options : new JRegistry;
-		$this->client = isset($client) ? $client : new JOauthOauth2client($this->options);
+		$this->client = isset($client) ? $client : new JOauth2client($this->options);
 	}
 
 	/**
