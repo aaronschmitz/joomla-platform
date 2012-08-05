@@ -106,6 +106,80 @@ class JGoogleAuthOauth2Test extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the isauth method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testIsAuth()
+	{
+		$this->assertEquals(false, $this->object->isAuth());
+
+		$token['access_token'] = 'accessvalue';
+		$token['refresh_token'] = 'refreshvalue';
+		$token['created'] = time();
+		$token['expires_in'] = 3600;
+		$this->oauth->setToken($token);
+
+		$this->assertEquals(true, $this->object->isAuth());
+
+		$token['created'] = time() - 4000;
+		$token['expires_in'] = 3600;
+		$this->oauth->setToken($token);
+
+		$this->assertEquals(false, $this->object->isAuth());
+	}
+
+	/**
+	 * Tests the auth method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testQuery()
+	{
+		$token['access_token'] = 'accessvalue';
+		$token['refresh_token'] = 'refreshvalue';
+		$token['created'] = time() - 1800;
+		$token['expires_in'] = 3600;
+		$this->oauth->setToken($token);
+
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('getOauthCallback'));
+		$result = $this->object->query('https://www.googleapis.com/auth/calendar', array('param' => 'value'), array(), 'get');
+		$this->assertEquals($result->body, 'Lorem ipsum dolor sit amet.');
+		$this->assertEquals(200, $result->code);
+
+		$this->http->expects($this->once())->method('post')->will($this->returnCallback('postOauthCallback'));
+		$result = $this->object->query('https://www.googleapis.com/auth/calendar', array('param' => 'value'), array(), 'post');
+		$this->assertEquals($result->body, 'Lorem ipsum dolor sit amet.');
+		$this->assertEquals(200, $result->code);
+	}
+
+	/**
+	 * Tests the googlize method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testGooglize()
+	{
+		$this->assertEquals(null, $this->object->getOption('authurl'));
+		$this->assertEquals(null, $this->object->getOption('tokenurl'));
+
+		$token['access_token'] = 'accessvalue';
+		$token['refresh_token'] = 'refreshvalue';
+		$token['created'] = time() - 1800;
+		$token['expires_in'] = 3600;
+		$this->oauth->setToken($token);
+
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('getOauthCallback'));
+		$result = $this->object->query('https://www.googleapis.com/auth/calendar', array('param' => 'value'), array(), 'get');
+
+		$this->assertEquals('https://accounts.google.com/o/oauth2/auth', $this->object->getOption('authurl'));
+		$this->assertEquals('https://accounts.google.com/o/oauth2/token', $this->object->getOption('tokenurl'));
+	}
+
+	/**
 	 * Tests the setOption method
 	 *
 	 * @group	JGoogle
