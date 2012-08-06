@@ -18,7 +18,7 @@ require_once JPATH_PLATFORM . '/joomla/google/data/adsense.php';
 class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    JRegistry  Options for the JOauth2client object.
+	 * @var    JRegistry  Options for the JOauthV2client object.
 	 */
 	protected $options;
 
@@ -33,7 +33,7 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 	protected $input;
 
 	/**
-	 * @var    JOauth2client  The OAuth client for sending requests to Google.
+	 * @var    JOauthV2client  The OAuth client for sending requests to Google.
 	 */
 	protected $oauth;
 
@@ -59,7 +59,7 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 		$this->options = new JRegistry;
 		$this->http = $this->getMock('JOauthHttp', array('head', 'get', 'delete', 'trace', 'post', 'put', 'patch'), array($this->options));
 		$this->input = new JInput;
-		$this->oauth = new JOauth2client($this->options, $this->http, $this->input);
+		$this->oauth = new JOauthV2client($this->options, $this->http, $this->input);
 		$this->auth = new JGoogleAuthOauth2($this->options, $this->oauth);
 		$this->object = new JGoogleDataAdsense($this->options, $this->auth);
 
