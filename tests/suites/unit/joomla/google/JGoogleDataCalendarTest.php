@@ -273,7 +273,7 @@ class JGoogleDataCalendarTest extends PHPUnit_Framework_TestCase
 		$result = $this->object->createEvent('calendarID', false, false, array('option' => 'value'));
 		$this->assertEquals($result, array('items' => array('1' => 1, '2' => 2)));
 
-		$result = $this->object->createEvent('calendarID', '1-1-2000', '1-2-2012', false, array('option' => 'value'));
+		$result = $this->object->createEvent('calendarID', '1-1-2000', '1-2-2012', array('option' => 'value'), false);
 		$this->assertEquals($result, array('items' => array('1' => 1, '2' => 2)));
 
 		$result = $this->object->createEvent('calendarID', '1-1-2000', '1-2-2012', array('option' => 'value'), false, true);
@@ -425,4 +425,4 @@ function emptyCalendarCallback($url, array $headers = null, $timeout = null)
 	$response->body = '';
 
 	return $response;
-}  
+}
