@@ -8,7 +8,7 @@
  */
 
 defined('JPATH_PLATFORM') or die;
-jimport('joomla.oauth.2client');
+jimport('joomla.oauth.v2client');
 
 /**
  * Google OAuth authentication class
