@@ -106,4 +106,116 @@ class JGoogleDataPicasaTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals($this->auth->isAuth(), $this->object->authenticated());
 	}
+
+	/**
+	 * Tests the listAlbums method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testListAlbums()
+	{
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('XMLPicasaAlbumlistCallback'));
+		$results = $this->object->listAlbums('userID');
+
+		$this->assertEquals(count($results), 2);
+        $i = 1;
+        foreach ($results as $result)
+        {
+            $this->assertEquals(get_class($result), 'JGoogleDataPicasaAlbum');
+            $this->assertEquals($result->getTitle(), 'Album ' .$i);
+            $i++;
+        }
+	}
+
+	/**
+	 * Tests the createAlbum method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testCreateAlbum()
+	{
+		$this->http->expects($this->once())->method('post')->will($this->returnCallback('XMLDataPicasaAlbumCallback'));
+		$result = $this->object->createAlbum('userID', 'New Title', 'private');
+        $this->assertEquals(get_class($result), 'JGoogleDataPicasaAlbum');
+        $this->assertEquals($result->getTitle(), 'New Title');
+	}
+
+	/**
+	 * Tests the getAlbum method
+	 *
+	 * @group	JGoogle
+	 * @return void
+	 */
+	public function testGetAlbum()
+	{
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('XMLPicasaAlbumCallback'));
+		$result = $this->object->getAlbum('https://picasaweb.google.com/data/entry/api/user/12345678901234567890/albumid/0123456789012345678');
+        $this->assertEquals(get_class($result), 'JGoogleDataPicasaAlbum');
+        $this->assertEquals($result->getTitle(), 'Album 2');
+	}
+}
+
+/**
+ * Dummy method
+ *
+ * @param   string   $url      Path to the resource.
+ * @param   array    $headers  An array of name-value pairs to include in the header of the request.
+ * @param   integer  $timeout  Read timeout in seconds.
+ *
+ * @return  JHttpResponse
+ *
+ * @since   12.2
+ */
+function XMLPicasaAlbumCallback($url, array $headers = null, $timeout = null)
+{
+    $response->code = 200;
+	$response->headers = array('Content-Type' => 'text/html');
+	$response->body = JFile::read(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'album.txt');
+
+	return $response;
+}
+
+/**
+ * Dummy method
+ *
+ * @param   string   $url      Path to the resource.
+ * @param   mixed    $data     Either an associative array or a string to be sent with the request.
+ * @param   array    $headers  An array of name-value pairs to include in the header of the request.
+ * @param   integer  $timeout  Read timeout in seconds.
+ *
+ * @return  JHttpResponse
+ *
+ * @since   12.2
+ */
+function XMLDataPicasaAlbumCallback($url, $data, array $headers = null, $timeout = null)
+{
+    PHPUnit_Framework_TestCase::assertContains('<title>New Title</title>', $data);
+    
+    $response->code = 200;
+	$response->headers = array('Content-Type' => 'text/html');
+	$response->body = $data;
+
+	return $response;
+}
+
+/**
+ * Dummy method
+ *
+ * @param   string   $url      Path to the resource.
+ * @param   array    $headers  An array of name-value pairs to include in the header of the request.
+ * @param   integer  $timeout  Read timeout in seconds.
+ *
+ * @return  JHttpResponse
+ *
+ * @since   12.2
+ */
+function XMLPicasaAlbumlistCallback($url, array $headers = null, $timeout = null)
+{
+    $response->code = 200;
+	$response->headers = array('Content-Type' => 'text/html');
+	$response->body =  JFile::read(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'albumlist.txt');
+
+	return $response;
 }
