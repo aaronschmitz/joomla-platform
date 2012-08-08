@@ -122,8 +122,8 @@ class JGoogleDataPicasaAlbumTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$this->http->expects($this->once())->method('delete')->will($this->returnCallback('emptyPicasaCallback'));
-		$results = $this->object->delete();
-		$this->assertEquals($results, true);
+		$result = $this->object->delete();
+		$this->assertTrue($result);
 	}
 
 	/**
