@@ -277,6 +277,18 @@ class JGoogleEmbedAnalyticsTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the getHeader method without a code
+	 *
+	 * @group	JGoogle
+	 * @expectedException UnexpectedValueException
+	 * @return void
+	 */
+	public function testGetHeaderException()
+	{
+		$this->object->getHeader();
+	}
+
+	/**
 	 * Tests the getBody method
 	 *
 	 * @group	JGoogle
@@ -306,6 +318,18 @@ class JGoogleEmbedAnalyticsTest extends PHPUnit_Framework_TestCase
 		$this->assertContains('pageTracker.method1("hello",true,5,null);', $body);
 		$this->assertContains('pageTracker._trackEvent("shopping","click","double",4,true);', $body);
 		$this->assertContains('pageTracker._setCustomVar(3,"hello",4,2);', $body);
+	}
+
+	/**
+	 * Tests the getBody method without a code
+	 *
+	 * @group	JGoogle
+	 * @expectedException UnexpectedValueException
+	 * @return void
+	 */
+	public function testGetBodyException()
+	{
+		$this->object->getBody();
 	}
 
 	/**

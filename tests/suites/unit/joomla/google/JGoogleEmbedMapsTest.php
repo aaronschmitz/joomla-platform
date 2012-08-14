@@ -317,7 +317,7 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetCenter()
 	{
-		$this->http->expects($this->exactly(4))->method('get')->will($this->returnCallback('mapsGeocodeCallback'));
+		$this->http->expects($this->exactly(5))->method('get')->will($this->returnCallback('mapsGeocodeCallback'));
 
 		$reference[] = array('loc' => array(37, -122), 'title' => '37, -122', 'options' => array());
 		$this->object->setCenter(array(37, -122));
@@ -339,6 +339,11 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($center, array(37.44188340, -122.14301950));
 
 		$obj = $this->object->setCenter('Nowhere');
+		$center = $this->object->getOption('mapcenter');
+		$this->assertFalse($obj);
+		$this->assertEquals($center, array(37.44188340, -122.14301950));
+
+		$obj = $this->object->setCenter('Nowhere', false);
 		$center = $this->object->getOption('mapcenter');
 		$this->assertFalse($obj);
 		$this->assertEquals($center, array(37.44188340, -122.14301950));
@@ -411,6 +416,18 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($marker, $marker0);
 		$marker = $this->object->deleteMarker();
 		$this->assertEquals($marker, $marker3);
+	}
+
+	/**
+	 * Tests the deleteMarkers method with an out of bounds index
+	 *
+	 * @group	JGoogle
+	 * @expectedException OutOfBoundsException
+	 * @return void
+	 */
+	public function testDeleteMarkersException()
+	{
+		$marker = $this->object->deleteMarker();
 	}
 
 	/**
@@ -582,7 +599,7 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 		$this->object->setMapID('MAPID');
 		$this->object->setKey('123456');
 		$this->object->useSensor();
-		$this->object->setAdditionalMapOptions(array('mapkey1' => 5, 'mapkey2' => null));
+		$this->object->setAdditionalMapOptions(array('mapkey1' => 5, 'mapkey2' => array ('subkey' => 'subvalue')));
 		$this->object->addMarker(array(25, 75));
 		$this->object->setAdditionalJavascript('alert();');
 		$this->object->setAutoload('onload');
@@ -620,6 +637,18 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 		$this->object->useSync();
 		$header = $this->object->getHeader();
 		$this->assertContains("<script type='text/javascript' src='http://maps.googleapis.com/maps/api/js?key=123456&sensor=false'>", $header);
+	}
+
+	/**
+	 * Tests the getHeader method without a key
+	 *
+	 * @group	JGoogle
+	 * @expectedException UnexpectedValueException
+	 * @return void
+	 */
+	public function testGetHeaderException()
+	{
+		$this->object->getHeader();
 	}
 
 	/**
@@ -683,8 +712,33 @@ class JGoogleEmbedMapsTest extends PHPUnit_Framework_TestCase
 		$geocode = $this->object->geocodeAddress('Wonderland');
 		$this->assertNull($geocode);
 	}
-}
 
+	/**
+	 * Tests the geocodeAddress method with 400 error
+	 *
+	 * @group	JGoogle
+	 * @expectedException RuntimeException
+	 * @return void
+	 */
+	public function testGeocodeAddress400()
+	{
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('mapsGeocode400Callback'));
+		$this->object->geocodeAddress('Palo Alto');
+	}
+
+	/**
+	 * Tests the geocodeAddress method with bad json
+	 *
+	 * @group	JGoogle
+	 * @expectedException RuntimeException
+	 * @return void
+	 */
+	public function testGeocodeAddressBadJson()
+	{
+		$this->http->expects($this->once())->method('get')->will($this->returnCallback('mapsGeocodeBadJsonCallback'));
+		$this->object->geocodeAddress('Palo Alto');
+	}
+}
 
 /**
  * Dummy method
@@ -719,6 +773,46 @@ function mapsGeocodeCallback($url, array $headers = null, $timeout = null)
 	$response->code = 200;
 	$response->headers = array('Content-Type' => 'application/json');
 	$response->body = $data;
+
+	return $response;
+}
+
+/**
+ * Dummy method
+ *
+ * @param   string   $url      Path to the resource.
+ * @param   array    $headers  An array of name-value pairs to include in the header of the request.
+ * @param   integer  $timeout  Read timeout in seconds.
+ *
+ * @return  JHttpResponse
+ *
+ * @since   12.2
+ */
+function mapsGeocode400Callback($url, array $headers = null, $timeout = null)
+{
+	$response->code = 400;
+	$response->headers = array('Content-Type' => 'application/json');
+	$response->body = '';
+
+	return $response;
+}
+
+/**
+ * Dummy method
+ *
+ * @param   string   $url      Path to the resource.
+ * @param   array    $headers  An array of name-value pairs to include in the header of the request.
+ * @param   integer  $timeout  Read timeout in seconds.
+ *
+ * @return  JHttpResponse
+ *
+ * @since   12.2
+ */
+function mapsGeocodeBadJsonCallback($url, array $headers = null, $timeout = null)
+{
+	$response->code = 200;
+	$response->headers = array('Content-Type' => 'application/json');
+	$response->body = 'BADDATA';
 
 	return $response;
 }

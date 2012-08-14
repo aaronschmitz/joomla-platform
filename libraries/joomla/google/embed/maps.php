@@ -381,7 +381,7 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 
 		if ($index >= count($markers) || $index < 0)
 		{
-			throw OutOfBoundsException('Marker index out of bounds.');
+			throw new OutOfBoundsException('Marker index out of bounds.');
 		}
 
 		$marker = $markers[$index];
