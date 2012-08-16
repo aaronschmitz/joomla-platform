@@ -28,17 +28,12 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 */
 	public function __construct(JRegistry $options = null, JGoogleAuth $auth = null)
 	{
-		$options = isset($options) ? $options : new JRegistry;
-		if (!$options->get('scope'))
-		{
-			$options->set('scope', 'https://www.googleapis.com/auth/plus.me');
-		}
-		if (isset($auth) && !$auth->getOption('scope'))
-		{
-			$auth->setOption('scope', 'https://www.googleapis.com/auth/plus.me');
-		}
-
 		parent::__construct($options, $auth);
+
+		if (isset($this->auth) && !$this->auth->getOption('scope'))
+		{
+			$this->auth->setOption('scope', 'https://www.googleapis.com/auth/plus.me');
+		}
 	}
 
 	/**
@@ -50,7 +45,6 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 * @return  mixed  Data from Google
 	 *
 	 * @since   1234
-	 * @throws UnexpectedValueException
 	 */
 	public function getPeople($id, $fields = null)
 	{
@@ -65,14 +59,7 @@ class JGoogleDataPlusPeople extends JGoogleData
 			}
 
 			$jdata = $this->auth->query($url);
-			if ($data = json_decode($jdata->body, true))
-			{
-				return $data;
-			}
-			else
-			{
-				throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
-			}
+			return json_decode($jdata->body, true);
 		}
 		else
 		{
@@ -93,7 +80,6 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 * @return  mixed  Data from Google
 	 *
 	 * @since   1234
-	 * @throws UnexpectedValueException
 	 */
 	public function search($query, $fields = null, $language = null, $max = 10, $token = null)
 	{
@@ -126,14 +112,7 @@ class JGoogleDataPlusPeople extends JGoogleData
 			}
 
 			$jdata = $this->auth->query($url);
-			if ($data = json_decode($jdata->body, true))
-			{
-				return $data;
-			}
-			else
-			{
-				throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
-			}
+			return json_decode($jdata->body, true);
 		}
 		else
 		{
@@ -154,7 +133,6 @@ class JGoogleDataPlusPeople extends JGoogleData
 	 * @return  mixed  Data from Google
 	 *
 	 * @since   1234
-	 * @throws UnexpectedValueException
 	 */
 	public function listByActivity($activityId, $collection, $fields = null, $max = 10, $token = null)
 	{
@@ -183,14 +161,7 @@ class JGoogleDataPlusPeople extends JGoogleData
 			}
 
 			$jdata = $this->auth->query($url);
-			if ($data = json_decode($jdata->body, true))
-			{
-				return $data;
-			}
-			else
-			{
-				throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
-			}
+			return json_decode($jdata->body, true);
 		}
 		else
 		{
