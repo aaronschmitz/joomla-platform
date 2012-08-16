@@ -14,19 +14,19 @@ defined('JPATH_PLATFORM') or die;
  *
  * @package     Joomla.Platform
  * @subpackage  Google
- * @since       1234
+ * @since       12.2
  */
 abstract class JGoogleData
 {
 	/**
 	 * @var    JRegistry  Options for the Google data object.
-	 * @since  1234
+	 * @since  12.2
 	 */
 	protected $options;
 
 	/**
 	 * @var    JGoogleAuth  Authentication client for the Google data object.
-	 * @since  1234
+	 * @since  12.2
 	 */
 	protected $auth;
 
@@ -36,7 +36,7 @@ abstract class JGoogleData
 	 * @param   JRegistry    $options  Google options object.
 	 * @param   JGoogleAuth  $auth     Google data http client object.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function __construct(JRegistry $options = null, JGoogleAuth $auth = null)
 	{
@@ -49,7 +49,7 @@ abstract class JGoogleData
 	 *
 	 * @return  bool  True on success.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function auth()
 	{
@@ -61,7 +61,7 @@ abstract class JGoogleData
 	 *
 	 * @return  bool  True if authenticated.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function authenticated()
 	{
@@ -75,7 +75,7 @@ abstract class JGoogleData
 	 *
 	 * @return  SimpleXMLElement  XMLElement of parsed data
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	protected static function safeXML($data)
@@ -91,6 +91,46 @@ abstract class JGoogleData
 	}
 
 	/**
+	 * Method to retrieve a list of data
+	 *
+	 * @param   array   $url       URL to GET
+	 * @param   int     $maxpages  Maximum number of pages to return
+	 * @param   string  $token     Next page token
+	 *
+	 * @return  mixed  Data from Google
+	 *
+	 * @since   12.2
+	 * @throws UnexpectedValueException
+	 */
+	protected function listGetData($url, $maxpages = 1, $token = null)
+	{
+		$qurl = $url;
+		if (strpos($url, '&'))
+		{
+			$qurl .= '&pageToken=' . $token;
+		}
+		else
+		{
+			$qurl .= 'pageToken=' . $token;
+		}
+		$jdata = $this->query($qurl);
+		$data = json_decode($jdata->body, true);
+
+		if ($data && array_key_exists('items', $data))
+		{
+			if ($maxpages != 1 && array_key_exists('nextPageToken', $data))
+			{
+				$data['items'] = array_merge($data['items'], $this->listGetData($url, $maxpages - 1, $data['nextPageToken']));
+			}
+			return $data['items'];
+		}
+		else
+		{
+			throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
+		}
+	}
+
+	/**
 	 * Method to retrieve data from Google
 	 *
 	 * @param   string  $url      The URL for the request.
@@ -100,11 +140,11 @@ abstract class JGoogleData
 	 *
 	 * @return  mixed  Data from Google.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
-	protected function query($url, $data = null, $headers = null, $method = 'post')
+	protected function query($url, $data = null, $headers = null, $method = 'get')
 	{
-		$this->client->query($url, $data, $headers, $method);
+		return $this->auth->query($url, $data, $headers, $method);
 	}
 
 	/**
@@ -114,7 +154,7 @@ abstract class JGoogleData
 	 *
 	 * @return  mixed  The option value.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function getOption($key)
 	{
@@ -129,7 +169,7 @@ abstract class JGoogleData
 	 *
 	 * @return  JGoogleData  This object for method chaining.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function setOption($key, $value)
 	{

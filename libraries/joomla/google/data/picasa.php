@@ -14,7 +14,7 @@ defined('JPATH_PLATFORM') or die;
  *
  * @package     Joomla.Platform
  * @subpackage  Google
- * @since       1234
+ * @since       12.2
  */
 class JGoogleDataPicasa extends JGoogleData
 {
@@ -24,21 +24,16 @@ class JGoogleDataPicasa extends JGoogleData
 	 * @param   JRegistry    $options  Google options object
 	 * @param   JGoogleAuth  $auth     Google data http client object
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function __construct(JRegistry $options = null, JGoogleAuth $auth = null)
 	{
-		$options = isset($options) ? $options : new JRegistry;
-		if (!$options->get('scope'))
-		{
-			$options->set('scope', 'https://picasaweb.google.com/data/');
-		}
-		if (isset($auth) && !$auth->getOption('scope'))
-		{
-			$auth->setOption('scope', 'https://picasaweb.google.com/data/');
-		}
-
 		parent::__construct($options, $auth);
+
+		if (isset($this->auth) && !$this->auth->getOption('scope'))
+		{
+			$this->auth->setOption('scope', 'https://picasaweb.google.com/data/');
+		}
 	}
 
 	/**
@@ -48,7 +43,7 @@ class JGoogleDataPicasa extends JGoogleData
 	 *
 	 * @return  mixed  Data from Google
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function listAlbums($userID = 'default')
@@ -56,7 +51,7 @@ class JGoogleDataPicasa extends JGoogleData
 		if ($this->authenticated())
 		{
 			$url = 'https://picasaweb.google.com/data/feed/api/user/' . $userID;
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
+			$jdata = $this->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
 			if (isset($xml->children()->entry))
 			{
@@ -91,7 +86,7 @@ class JGoogleDataPicasa extends JGoogleData
 	 *
 	 * @return  mixed  Data from Google.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function createAlbum($userID = 'default', $title = '', $access = 'private', $summary = '', $location = '', $time = false, $keywords = array())
 	{
@@ -113,7 +108,7 @@ class JGoogleDataPicasa extends JGoogleData
 			$cat->addAttribute('term', 'http://schemas.google.com/photos/2007#album');
 
 			$url = 'https://picasaweb.google.com/data/feed/api/user/' . $userID;
-			$jdata = $this->auth->query($url, $xml->asXML(), array('GData-Version' => 2, 'Content-type' => 'application/atom+xml'), 'post');
+			$jdata = $this->query($url, $xml->asXML(), array('GData-Version' => 2, 'Content-type' => 'application/atom+xml'), 'post');
 
 			$xml = $this->safeXML($jdata->body);
 			return new JGoogleDataPicasaAlbum($xml, $this->options, $this->auth);
@@ -131,14 +126,14 @@ class JGoogleDataPicasa extends JGoogleData
 	 *
 	 * @return  mixed  Data from Google
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function getAlbum($url)
 	{
 		if ($this->authenticated())
 		{
-			$jdata = $this->auth->query($url, null, array('GData-Version' => 2));
+			$jdata = $this->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
 			return new JGoogleDataPicasaAlbum($xml, $this->options, $this->auth);
 		}

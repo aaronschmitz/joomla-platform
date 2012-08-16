@@ -8,35 +8,35 @@
  */
 
 defined('JPATH_PLATFORM') or die;
-jimport('joomla.oauth.oauth2client');
+jimport('joomla.oauth.v2client');
 
 /**
  * Google OAuth authentication class
  *
  * @package     Joomla.Platform
  * @subpackage  Google
- * @since       1234
+ * @since       12.2
  */
 class JGoogleAuthOauth2 extends JGoogleAuth
 {
 	/**
-	 * @var    JOauth2client  OAuth client for the Google authentication object.
-	 * @since  1234
+	 * @var    JOauthV2client  OAuth client for the Google authentication object.
+	 * @since  12.2
 	 */
 	protected $client;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param   JRegistry      $options  JGoogleAuth options object.
-	 * @param   JOauth2client  $client   OAuth client for Google authentication.
+	 * @param   JRegistry       $options  JGoogleAuth options object.
+	 * @param   JOauthV2client  $client   OAuth client for Google authentication.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
-	public function __construct(JRegistry $options = null, JOauthOauth2client $client = null)
+	public function __construct(JRegistry $options = null, JOauthV2client $client = null)
 	{
 		$this->options = isset($options) ? $options : new JRegistry;
-		$this->client = isset($client) ? $client : new JOauthOauth2client($this->options);
+		$this->client = isset($client) ? $client : new JOauthV2client($this->options);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	 *
 	 * @return  bool  True on success.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function auth()
 	{
@@ -57,7 +57,7 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	 *
 	 * @return  bool  Is authenticated
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function isAuth()
 	{
@@ -74,7 +74,7 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	 *
 	 * @return  mixed  Data from Google.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	public function query($url, $data = null, $headers = null, $method = 'get')
 	{
@@ -85,9 +85,9 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	/**
 	 * Method to fill in Google-specific OAuth settings
 	 *
-	 * @return  JOauth2client  Google-configured Oauth2 client.
+	 * @return  JOauthV2client  Google-configured Oauth2 client.
 	 *
-	 * @since   1234
+	 * @since   12.2
 	 */
 	protected function googlize()
 	{
