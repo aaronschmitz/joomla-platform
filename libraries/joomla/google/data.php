@@ -124,6 +124,10 @@ abstract class JGoogleData
 			}
 			return $data['items'];
 		}
+		elseif ($data)
+		{
+			return array();
+		}
 		else
 		{
 			throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
