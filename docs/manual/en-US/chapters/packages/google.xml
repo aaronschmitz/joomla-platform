@@ -66,7 +66,7 @@ $options-&gt;set('clientid', 'google_client_id.apps.googleusercontent.com');
 $options-&gt;set('clientsecret', 'google_client_secret');
 $options-&gt;set('redirecturi', JURI::current());
 
-$google = new JGithub($options);
+$google = new JGoogle($options);
 
 // Get a calendar API object
 $calendar = $google->data('calendar');
