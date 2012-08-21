@@ -215,7 +215,7 @@ class JGoogleDataPicasaPhotoTest extends PHPUnit_Framework_TestCase
 	public function testGetTime()
 	{
 		$time = $this->object->getTime();
-		$this->assertEquals($time, 1328140800000);
+		$this->assertEquals($time, 1328140800);
 	}
 
 	/**

@@ -165,14 +165,13 @@ class JGoogleDataPicasaAlbum extends JGoogleData
 	/**
 	 * Method to get the time of the album
 	 *
-	 * @return  int  Album time
+	 * @return  double  Album time
 	 *
 	 * @since   12.2
 	 */
 	public function getTime()
 	{
-		return (int) $this->xml->children('gphoto', true)->timestamp;
-		return $this;
+		return (double) $this->xml->children('gphoto', true)->timestamp / 1000;
 	}
 
 	/**
@@ -246,7 +245,7 @@ class JGoogleDataPicasaAlbum extends JGoogleData
 	 */
 	public function setTime($time)
 	{
-		$this->xml->children('gphoto', true)->timestamp = $time;
+		$this->xml->children('gphoto', true)->timestamp = $time * 1000;
 		return $this;
 	}
 
