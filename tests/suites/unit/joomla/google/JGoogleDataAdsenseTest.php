@@ -220,7 +220,7 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 	public function testListUrlChannels()
 	{
 		$this->http->expects($this->once())->method('get')->will($this->returnCallback('jsonAdsenseCallback'));
-		$result = $this->object->listUrlChannels('accountID', array('option' => 'value'));
+		$result = $this->object->listUrlChannels('accountID', 'clientID', array('option' => 'value'));
 		$this->assertEquals($result, array('1' => 1, '2' => 2));
 	}
 
@@ -346,13 +346,13 @@ class JGoogleDataAdsenseTest extends PHPUnit_Framework_TestCase
 
 		$functions['getAccount'] = array('accountID');
 		$functions['listAccounts'] = array(array('option' => 'value'));
-		$functions['listClients'] = array(array('option' => 'value'));
+		$functions['listClients'] = array('accountID', array('option' => 'value'));
 		$functions['getUnit'] = array('accountID', 'clientID', 'unitID');
 		$functions['listUnitChannels'] = array('accountID', 'clientID', 'unitID', array('option' => 'value'));
 		$functions['getChannel'] = array('accountID', 'clientID', 'channelID');
 		$functions['listChannels'] = array('accountID', 'clientID', array('option' => 'value'));
 		$functions['listChannelUnits'] = array('accountID', 'clientID', 'channelID', array('option' => 'value'));
-		$functions['listUrlChannels'] = array('accountID', array('option' => 'value'));
+		$functions['listUrlChannels'] = array('accountID', 'clientID', array('option' => 'value'));
 		$functions['generateReport'] = array('accountID', time(), time() + 100000, array('option' => 'value'));
 
 		foreach ($functions as $function => $params)
