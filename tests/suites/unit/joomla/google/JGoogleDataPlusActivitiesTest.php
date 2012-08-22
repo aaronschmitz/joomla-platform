@@ -105,7 +105,7 @@ class JGoogleDataPlusActivitiesTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAuth()
 	{
-		$this->assertEquals($this->auth->auth(), $this->object->auth());
+		$this->assertEquals($this->auth->authenticate(), $this->object->authenticate());
 	}
 
 	/**
@@ -116,7 +116,7 @@ class JGoogleDataPlusActivitiesTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIsAuth()
 	{
-		$this->assertEquals($this->auth->isAuth(), $this->object->authenticated());
+		$this->assertEquals($this->auth->isAuthenticated(), $this->object->isAuthenticated());
 	}
 
 	/**

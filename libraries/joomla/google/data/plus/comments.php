@@ -53,7 +53,7 @@ class JGoogleDataPlusComments extends JGoogleData
 	 */
 	public function listComments($activityId, $fields = null, $max = 20, $order = null, $token = null, $alt = null)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getOption('api.url') . 'activities/' . $activityId . '/comments';
 
@@ -112,7 +112,7 @@ class JGoogleDataPlusComments extends JGoogleData
 	 */
 	public function getComment($id, $fields = null)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getOption('api.url') . 'comments/' . $id;
 

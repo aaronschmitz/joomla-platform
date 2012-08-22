@@ -53,7 +53,7 @@ class JGoogleDataPlusActivities extends JGoogleData
 	 */
 	public function listActivities($userId, $collection, $fields = null, $max = 10, $token = null, $alt = null)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getOption('api.url') . 'people/' . $userId . '/activities/' . $collection;
 
@@ -106,7 +106,7 @@ class JGoogleDataPlusActivities extends JGoogleData
 	 */
 	public function getActivity($id, $fields = null, $alt = null)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getOption('api.url') . 'activities/' . $id;
 
@@ -149,7 +149,7 @@ class JGoogleDataPlusActivities extends JGoogleData
 	 */
 	public function search($query, $fields = null, $language = null, $max = 10, $order = null, $token = null)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getOption('api.url') . 'activities?query=' . urlencode($query);
 
