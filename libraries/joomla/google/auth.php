@@ -27,20 +27,20 @@ abstract class JGoogleAuth
 	/**
 	 * Abstract method to authenticate to Google
 	 *
-	 * @return  bool  True on success.
+	 * @return  boolean  True on success.
 	 *
 	 * @since   12.2
 	 */
-	abstract public function auth();
+	abstract public function authenticate();
 
 	/**
 	 * Verify if the client has been authenticated
 	 *
-	 * @return  bool  Is authenticated
+	 * @return  boolean  Is authenticated
 	 *
 	 * @since   12.2
 	 */
-	abstract public function isAuth();
+	abstract public function isAuthenticated();
 
 	/**
 	 * Abstract method to retrieve data from Google

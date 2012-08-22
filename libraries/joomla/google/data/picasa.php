@@ -48,9 +48,9 @@ class JGoogleDataPicasa extends JGoogleData
 	 */
 	public function listAlbums($userID = 'default')
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://picasaweb.google.com/data/feed/api/user/' . $userID;
+			$url = 'https://picasaweb.google.com/data/feed/api/user/' . urlencode($userID);
 			$jdata = $this->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);
 			if (isset($xml->children()->entry))
@@ -90,7 +90,7 @@ class JGoogleDataPicasa extends JGoogleData
 	 */
 	public function createAlbum($userID = 'default', $title = '', $access = 'private', $summary = '', $location = '', $time = false, $keywords = array())
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$time = $time ? $time : time();
 			$title = $title != '' ? $title : date('F j, Y');
@@ -107,7 +107,7 @@ class JGoogleDataPicasa extends JGoogleData
 			$cat->addAttribute('scheme', 'http://schemas.google.com/g/2005#kind');
 			$cat->addAttribute('term', 'http://schemas.google.com/photos/2007#album');
 
-			$url = 'https://picasaweb.google.com/data/feed/api/user/' . $userID;
+			$url = 'https://picasaweb.google.com/data/feed/api/user/' . urlencode($userID);
 			$jdata = $this->query($url, $xml->asXML(), array('GData-Version' => 2, 'Content-type' => 'application/atom+xml'), 'post');
 
 			$xml = $this->safeXML($jdata->body);
@@ -131,7 +131,7 @@ class JGoogleDataPicasa extends JGoogleData
 	 */
 	public function getAlbum($url)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$jdata = $this->query($url, null, array('GData-Version' => 2));
 			$xml = $this->safeXML($jdata->body);

@@ -48,7 +48,7 @@ class JGoogleEmbedAnalytics extends JGoogleEmbed
 	/**
 	 * Checks if the javascript is set to be asynchronous
 	 *
-	 * @return  bool  True if asynchronous
+	 * @return  boolean  True if asynchronous
 	 *
 	 * @since   12.2
 	 */
@@ -207,11 +207,11 @@ class JGoogleEmbedAnalytics extends JGoogleEmbed
 	/**
 	 * Track an analytics event
 	 *
-	 * @param   string  $category     The general event category
- 	 * @param   string  $action       The event action
- 	 * @param   string  $label        The event description
- 	 * @param   string  $value        The value of the event
-	 * @param   bool    $noninteract  Don't allow this event to impact bounce statistics
+	 * @param   string   $category     The general event category
+ 	 * @param   string   $action       The event action
+ 	 * @param   string   $label        The event description
+ 	 * @param   string   $value        The value of the event
+	 * @param   boolean  $noninteract  Don't allow this event to impact bounce statistics
 	 *
 	 * @return  array  The added call
 	 *
@@ -225,11 +225,11 @@ class JGoogleEmbedAnalytics extends JGoogleEmbed
 	/**
 	 * Get the code to track an analytics event
 	 *
-	 * @param   string  $category     The general event category
- 	 * @param   string  $action       The event action
- 	 * @param   string  $label        The event description
- 	 * @param   string  $value        The value of the event
-	 * @param   bool    $noninteract  Don't allow this event to impact bounce statistics
+	 * @param   string   $category     The general event category
+ 	 * @param   string   $action       The event action
+ 	 * @param   string   $label        The event description
+ 	 * @param   string   $value        The value of the event
+	 * @param   boolean  $noninteract  Don't allow this event to impact bounce statistics
 	 *
 	 * @return  string  The created call
 	 *

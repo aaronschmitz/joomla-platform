@@ -99,7 +99,7 @@ class JGoogleDataPicasaAlbumTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAuth()
 	{
-		$this->assertEquals($this->auth->auth(), $this->object->auth());
+		$this->assertEquals($this->auth->authenticate(), $this->object->authenticate());
 	}
 
 	/**
@@ -110,7 +110,7 @@ class JGoogleDataPicasaAlbumTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIsAuth()
 	{
-		$this->assertEquals($this->auth->isAuth(), $this->object->authenticated());
+		$this->assertEquals($this->auth->isAuthenticated(), $this->object->isAuthenticated());
 	}
 
 	/**
@@ -199,7 +199,7 @@ class JGoogleDataPicasaAlbumTest extends PHPUnit_Framework_TestCase
 	public function testGetTime()
 	{
 		$time = $this->object->getTime();
-		$this->assertEquals($time, 1293843600000);
+		$this->assertEquals($time, 1293843600);
 	}
 
 	/**
@@ -258,8 +258,8 @@ class JGoogleDataPicasaAlbumTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetTime()
 	{
-		$time = $this->object->setTime(1293843600001)->getTime();
-		$this->assertEquals($time, 1293843600001);
+		$time = $this->object->setTime(1293843600.001)->getTime();
+		$this->assertEquals($time, 1293843600.001);
 	}
 
 	/**

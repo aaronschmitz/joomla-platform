@@ -39,8 +39,8 @@ class JGoogleDataAdsense extends JGoogleData
 	/**
 	 * Method to get an Adsense account's settings from Google
 	 *
-	 * @param   string  $accountID    ID of account to get
-	 * @param   bool    $subaccounts  Include list of subaccounts
+	 * @param   string   $accountID    ID of account to get
+	 * @param   boolean  $subaccounts  Include list of subaccounts
 	 *
 	 * @return  mixed  Data from Google
 	 *
@@ -48,9 +48,9 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function getAccount($accountID, $subaccounts = true)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . $subaccounts ? '?tree=true' : '';
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . ($subaccounts ? '?tree=true' : '');
 			$jdata = $this->query($url);
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -80,7 +80,7 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listAccounts($options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
@@ -107,11 +107,11 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listClients($accountID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/adclients?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . '/adclients?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
 		else
@@ -133,9 +133,10 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function getUnit($accountID, $adclientID, $adunitID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/adclients/' . $adclientID . '/adunits/' . $adunitID;
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID);
+			$url .= '/adclients/' . urlencode($adclientID) . '/adunits/' . urlencode($adunitID);
 			$jdata = $this->query($url);
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -168,12 +169,12 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listUnitChannels($accountID, $adclientID, $adunitID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID;
-			$url .= '/adclients/' . $adclientID . '/adunits/' . $adunitID . '/customchannels?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID);
+			$url .= '/adclients/' . urlencode($adclientID) . '/adunits/' . urlencode($adunitID) . '/customchannels?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
 		else
@@ -195,9 +196,10 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function getChannel($accountID, $adclientID, $channelID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/adclients/' . $adclientID . '/customchannels/' . $channelID;
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . '/adclients/';
+			$url .= urlencode($adclientID) . '/customchannels/' . urlencode($channelID);
 			$jdata = $this->query($url);
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -229,11 +231,11 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listChannels($accountID, $adclientID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/adclients/' . $adclientID;
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . '/adclients/' . urlencode($adclientID);
 			$url .= '/customchannels?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
@@ -259,12 +261,12 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listChannelUnits($accountID, $adclientID, $channelID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/adclients/' . $adclientID;
-			$url .= '/customchannels/' . $channelID . '/adunits?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . '/adclients/' . urlencode($adclientID);
+			$url .= '/customchannels/' . urlencode($channelID) . '/adunits?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
 		else
@@ -288,12 +290,12 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function listUrlChannels($accountID, $adclientID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID;
-			$url .= '/adclients/' . $adclientID . '/urlchannels?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID);
+			$url .= '/adclients/' . urlencode($adclientID) . '/urlchannels?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
 		else
@@ -318,7 +320,7 @@ class JGoogleDataAdsense extends JGoogleData
 	 */
 	public function generateReport($accountID, $start, $end = false, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			if (is_int($start))
 			{
@@ -366,7 +368,7 @@ class JGoogleDataAdsense extends JGoogleData
 			$begin = array_key_exists('startIndex', $options) ? $options['startIndex'] : 0;
 			unset($options['startIndex']);
 
-			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . $accountID . '/reports?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/adsense/v1.1/accounts/' . urlencode($accountID) . '/reports?' . http_build_query($options);
 			if (strpos($url, '&'))
 			{
 				$url .= '&';

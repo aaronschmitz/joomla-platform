@@ -41,16 +41,16 @@ class JGoogleDataCalendar extends JGoogleData
 	 *
 	 * @param   string  $calendarID  ID of calendar to delete
 	 *
-	 * @return  bool  Success or failure
+	 * @return  boolean  Success or failure
 	 *
 	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function removeCalendar($calendarID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$jdata = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendarList/' . $calendarID, null, null, 'delete');
+			$jdata = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendarList/' . urlencode($calendarID), null, null, 'delete');
 			if ($jdata->body != '')
 			{
 				throw new UnexpectedValueException("Unexpected data received from Google: `{$jdata->body}`.");
@@ -75,9 +75,9 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function getCalendar($calendarID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$jdata = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendarList/' . $calendarID);
+			$jdata = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendarList/' . urlencode($calendarID));
 			if ($data = json_decode($jdata->body, true))
 			{
 				return $data;
@@ -106,7 +106,7 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function addCalendar($calendarID, $options = array())
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$options['id'] = $calendarID;
 			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList';
@@ -139,7 +139,7 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function listCalendars($options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
@@ -165,9 +165,9 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function editCalendarSettings($calendarID, $options)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList/' . $calendarID;
+			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList/' . urlencode($calendarID);
 			$jdata = $this->query($url, json_encode($options), array('Content-type' => 'application/json'), 'put');
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -189,16 +189,16 @@ class JGoogleDataCalendar extends JGoogleData
 	 *
 	 * @param   string  $calendarID  ID of calendar to clear
 	 *
-	 * @return  bool  Success or failure
+	 * @return  boolean  Success or failure
 	 *
 	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function clearCalendar($calendarID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$data = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID . '/clear', null, null, 'post');
+			$data = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendars/' . urlencode($calendarID) . '/clear', null, null, 'post');
 			if ($data->body != '')
 			{
 				throw new UnexpectedValueException("Unexpected data received from Google: `{$data->body}`.");
@@ -216,16 +216,16 @@ class JGoogleDataCalendar extends JGoogleData
 	 *
 	 * @param   string  $calendarID  ID of calendar to delete.
 	 *
-	 * @return  bool  Success or failure
+	 * @return  boolean  Success or failure
 	 *
 	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function deleteCalendar($calendarID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$data = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID, null, null, 'delete');
+			$data = $this->query('https://www.googleapis.com/calendar/v3/users/me/calendars/' . urlencode($calendarID), null, null, 'delete');
 			if ($data->body != '')
 			{
 				throw new UnexpectedValueException("Unexpected data received from Google: `{$data->body}`.");
@@ -251,7 +251,7 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function createCalendar($title, $options = array())
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$options['summary'] = $title;
 			$url = 'https://www.googleapis.com/calendar/v3/calendars';
@@ -284,9 +284,9 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function editCalendar($calendarID, $options)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID;
+			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . urlencode($calendarID);
 			$jdata = $this->query($url, json_encode($options), array('Content-type' => 'application/json'), 'put');
 			$data = json_decode($jdata->body, true);
 
@@ -311,16 +311,16 @@ class JGoogleDataCalendar extends JGoogleData
 	 * @param   string  $calendarID  ID of calendar to delete from
 	 * @param   string  $eventID     ID of event to delete.
 	 *
-	 * @return  bool  Success or failure.
+	 * @return  boolean  Success or failure.
 	 *
 	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function deleteEvent($calendarID, $eventID)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID . '/events/' . $eventID;
+			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . urlencode($calendarID) . '/events/' . urlencode($eventID);
 			$data = $this->query($url, null, null, 'delete');
 			if ($data->body != '')
 			{
@@ -348,9 +348,10 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function getEvent($calendarID, $eventID, $options = array())
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList/' . $calendarID . '/events/' . $eventID . '?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList/';
+			$url .= urlencode($calendarID) . '/events/' . urlencode($eventID) . '?' . http_build_query($options);
 			$jdata = $this->query($url);
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -370,13 +371,13 @@ class JGoogleDataCalendar extends JGoogleData
 	/**
 	 * Method to create a Google Calendar event
 	 *
-	 * @param   string  $calendarID  ID of calendar
-	 * @param   mixed   $start       Event start time
-	 * @param   mixed   $end         Event end time
-	 * @param   array   $options     New event settings
-	 * @param   mixed   $timezone    Timezone for event
-	 * @param   bool    $allday      Treat event as an all-day event
-	 * @param   bool    $notify      Notify participants
+	 * @param   string   $calendarID  ID of calendar
+	 * @param   mixed    $start       Event start time
+	 * @param   mixed    $end         Event end time
+	 * @param   array    $options     New event settings
+	 * @param   mixed    $timezone    Timezone for event
+	 * @param   boolean  $allday      Treat event as an all-day event
+	 * @param   boolean  $notify      Notify participants
 	 *
 	 * @return  mixed  Data from Google.
 	 *
@@ -386,7 +387,7 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function createEvent($calendarID, $start, $end = false, $options = array(), $timezone = false, $allday = false, $notify = false)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			if (!$start)
 			{
@@ -459,7 +460,7 @@ class JGoogleDataCalendar extends JGoogleData
 				$options['end']['timeZone'] = $timezone;
 			}
 
-			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarID . '/events' . ($notify ? '?sendNotifications=true' : '');
+			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . urlencode($calendarID) . '/events' . ($notify ? '?sendNotifications=true' : '');
 			$jdata = $this->query($url, json_encode($options), array('Content-type' => 'application/json'), 'post');
 			if ($data = json_decode($jdata->body, true))
 			{
@@ -491,11 +492,11 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function listRecurrences($calendarID, $eventID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID . '/events/' . $eventID . '/instances';
+			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . urlencode($calendarID) . '/events/' . urlencode($eventID) . '/instances';
 			$url .= '?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
@@ -519,11 +520,11 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function listEvents($calendarID, $options = array(), $maxpages = 1)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$next = array_key_exists('nextPageToken', $options) ? $options['nextPage'] : null;
 			unset($options['nextPageToken']);
-			$url = 'https://www.googleapis.com/calendar/v3/users/me/calendars/' . $calendarID . '?' . http_build_query($options);
+			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . urlencode($calendarID) . '/events?' . http_build_query($options);
 			return $this->listGetData($url, $maxpages, $next);
 		}
 		else
@@ -535,10 +536,10 @@ class JGoogleDataCalendar extends JGoogleData
 	/**
 	 * Method to move an event from one calendar to another
 	 *
-	 * @param   string  $calendarID  Calendar ID
-	 * @param   string  $eventID     ID of the event to change
-	 * @param   string  $destID      Calendar ID
-	 * @param   bool    $notify      Notify participants of changes
+	 * @param   string   $calendarID  Calendar ID
+	 * @param   string   $eventID     ID of the event to change
+	 * @param   string   $destID      Calendar ID
+	 * @param   boolean  $notify      Notify participants of changes
 	 *
 	 * @return  mixed  Data from Google.
 	 *
@@ -547,9 +548,9 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function moveEvent($calendarID, $eventID, $destID, $notify = false)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarID . '/events/' . $eventID . '/move';
+			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . urlencode($calendarID) . '/events/' . urlencode($eventID) . '/move';
 			$url .= '?destination=' . $destID . ($notify ? '&sendNotifications=true' : '');
 			$jdata = $this->query($url, null, null, 'post');
 			if ($data = json_decode($jdata->body, true))
@@ -570,10 +571,10 @@ class JGoogleDataCalendar extends JGoogleData
 	/**
 	 * Method to edit a Google Calendar event
 	 *
-	 * @param   string  $calendarID  Calendar ID
-	 * @param   string  $eventID     ID of the event to change
-	 * @param   array   $options     Event settings
-	 * @param   bool    $notify      Notify participants of changes
+	 * @param   string   $calendarID  Calendar ID
+	 * @param   string   $eventID     ID of the event to change
+	 * @param   array    $options     Event settings
+	 * @param   boolean  $notify      Notify participants of changes
 	 *
 	 * @return  mixed  Data from Google.
 	 *
@@ -582,9 +583,10 @@ class JGoogleDataCalendar extends JGoogleData
 	 */
 	public function editEvent($calendarID, $eventID, $options, $notify = false)
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
-			$url = 'https://www.googleapis.com/calendar/v3/calendars/' . $calendarID . '/events/' . $eventID . ($notify ? '?sendNotifications=true' : '');
+			$url = 'https://www.googleapis.com/calendar/v3/calendars/';
+			$url .= urlencode($calendarID) . '/events/' . urlencode($eventID) . ($notify ? '?sendNotifications=true' : '');
 			$jdata = $this->query($url, json_encode($options), array('Content-type' => 'application/json'), 'put');
 			if ($data = json_decode($jdata->body, true))
 			{

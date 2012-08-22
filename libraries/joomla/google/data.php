@@ -47,25 +47,25 @@ abstract class JGoogleData
 	/**
 	 * Method to authenticate to Google
 	 *
-	 * @return  bool  True on success.
+	 * @return  boolean  True on success.
 	 *
 	 * @since   12.2
 	 */
-	public function auth()
+	public function authenticate()
 	{
-		return $this->auth->auth();
+		return $this->auth->authenticate();
 	}
 
 	/**
 	 * Check authentication
 	 *
-	 * @return  bool  True if authenticated.
+	 * @return  boolean  True if authenticated.
 	 *
 	 * @since   12.2
 	 */
-	public function authenticated()
+	public function isAuthenticated()
 	{
-		return $this->auth->isAuth();
+		return $this->auth->isAuthenticated();
 	}
 
 	/**
@@ -105,11 +105,11 @@ abstract class JGoogleData
 	protected function listGetData($url, $maxpages = 1, $token = null)
 	{
 		$qurl = $url;
-		if (strpos($url, '&'))
+		if (strpos($url, '&') && isset($token))
 		{
 			$qurl .= '&pageToken=' . $token;
 		}
-		else
+		elseif (isset($token))
 		{
 			$qurl .= 'pageToken=' . $token;
 		}
@@ -123,6 +123,10 @@ abstract class JGoogleData
 				$data['items'] = array_merge($data['items'], $this->listGetData($url, $maxpages - 1, $data['nextPageToken']));
 			}
 			return $data['items'];
+		}
+		elseif ($data)
+		{
+			return array();
 		}
 		else
 		{

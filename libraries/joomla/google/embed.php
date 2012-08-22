@@ -133,8 +133,8 @@ abstract class JGoogleEmbed
 	/**
 	 * Create a javascript array from a PHP array
 	 *
-	 * @param   array  $array   The array to convert to javascript
-	 * @param   bool   $escape  Escape strings
+	 * @param   array    $array   The array to convert to javascript
+	 * @param   boolean  $escape  Escape strings
 	 *
 	 * @return  string  The javscript code
 	 *

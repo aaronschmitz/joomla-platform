@@ -99,7 +99,7 @@ class JGoogleDataPicasaPhotoTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAuth()
 	{
-		$this->assertEquals($this->auth->auth(), $this->object->auth());
+		$this->assertEquals($this->auth->authenticate(), $this->object->authenticate());
 	}
 
 	/**
@@ -110,7 +110,7 @@ class JGoogleDataPicasaPhotoTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIsAuth()
 	{
-		$this->assertEquals($this->auth->isAuth(), $this->object->authenticated());
+		$this->assertEquals($this->auth->isAuthenticated(), $this->object->isAuthenticated());
 	}
 
 	/**
@@ -215,7 +215,7 @@ class JGoogleDataPicasaPhotoTest extends PHPUnit_Framework_TestCase
 	public function testGetTime()
 	{
 		$time = $this->object->getTime();
-		$this->assertEquals($time, 1328140800000);
+		$this->assertEquals($time, 1328140800);
 	}
 
 	/**
