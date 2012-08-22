@@ -80,7 +80,7 @@ class JOauthV2clientTest extends PHPUnit_Framework_TestCase
 		$this->object->setOption('requestparams', array('access_type' => 'offline', 'approval_prompt' => 'auto'));
 		$this->object->setOption('sendheaders', true);
 
-		$this->object->authenticated();
+		$this->object->authenticate();
 		$headers = JResponse::getHeaders();
 		$location = false;
 		foreach ($headers as $header)
@@ -98,7 +98,7 @@ class JOauthV2clientTest extends PHPUnit_Framework_TestCase
 		$this->input->set('code', '4/wEr_dK8SDkjfpwmc98KejfiwJP-f4wm.kdowmnr82jvmeisjw94mKFIJE48mcEM');
 
 		$this->http->expects($this->once())->method('post')->will($this->returnCallback('encodedGrantOauthCallback'));
-		$result = $this->object->authenticated();
+		$result = $this->object->authenticate();
 		$this->assertEquals('accessvalue', $result['access_token']);
 		$this->assertEquals('refreshvalue', $result['refresh_token']);
 		$this->assertEquals(3600, $result['expires_in']);
@@ -118,7 +118,7 @@ class JOauthV2clientTest extends PHPUnit_Framework_TestCase
 		$this->input->set('code', '4/wEr_dK8SDkjfpwmc98KejfiwJP-f4wm.kdowmnr82jvmeisjw94mKFIJE48mcEM');
 
 		$this->http->expects($this->once())->method('post')->will($this->returnCallback('jsonGrantOauthCallback'));
-		$result = $this->object->authenticated();
+		$result = $this->object->authenticate();
 		$this->assertEquals('accessvalue', $result['access_token']);
 		$this->assertEquals('refreshvalue', $result['refresh_token']);
 		$this->assertEquals(3600, $result['expires_in']);

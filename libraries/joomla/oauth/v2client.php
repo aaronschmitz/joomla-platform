@@ -60,7 +60,7 @@ class JOauthV2client
 	 *
 	 * @since   12.2
 	 */
-	public function authenticated()
+	public function authenticate()
 	{
 		if ($data['code'] = $this->input->get('code', false, 'raw'))
 		{
