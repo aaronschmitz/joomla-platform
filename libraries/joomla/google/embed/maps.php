@@ -395,7 +395,7 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 	/**
 	 * Checks if the javascript is set to be asynchronous
 	 *
-	 * @return  bool  True if asynchronous
+	 * @return  boolean  True if asynchronous
 	 *
 	 * @since   12.2
 	 */
@@ -460,7 +460,7 @@ class JGoogleEmbedMaps extends JGoogleEmbed
 	/**
 	 * Checks if a sensor is set to be required
 	 *
-	 * @return  bool  True if asynchronous
+	 * @return  boolean  True if asynchronous
 	 *
 	 * @since   12.2
 	 */

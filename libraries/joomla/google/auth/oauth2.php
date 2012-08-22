@@ -42,26 +42,26 @@ class JGoogleAuthOauth2 extends JGoogleAuth
 	/**
 	 * Method to authenticate to Google
 	 *
-	 * @return  bool  True on success.
+	 * @return  boolean  True on success.
 	 *
 	 * @since   12.2
 	 */
-	public function auth()
+	public function authenticate()
 	{
 		$this->googlize();
-		return $this->client->auth();
+		return $this->client->authenticate();
 	}
 
 	/**
 	 * Verify if the client has been authenticated
 	 *
-	 * @return  bool  Is authenticated
+	 * @return  boolean  Is authenticated
 	 *
 	 * @since   12.2
 	 */
-	public function isAuth()
+	public function isAuthenticated()
 	{
-		return $this->client->isAuth();
+		return $this->client->isAuthenticated();
 	}
 
 	/**

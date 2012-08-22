@@ -50,14 +50,14 @@ class JGoogleDataPicasaPhoto extends JGoogleData
 	 *
 	 * @param   mixed  $match  Check for most up to date photo
 	 *
-	 * @return  bool  Success or failure.
+	 * @return  boolean  Success or failure.
 	 *
 	 * @since   12.2
 	 * @throws UnexpectedValueException
 	 */
 	public function delete($match = '*')
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getLink();
 			if ($match === true)
@@ -301,7 +301,7 @@ class JGoogleDataPicasaPhoto extends JGoogleData
 	 */
 	public function save($match = '*')
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getLink();
 			if ($match === true)
@@ -342,7 +342,7 @@ class JGoogleDataPicasaPhoto extends JGoogleData
 	 */
 	public function refresh()
 	{
-		if ($this->authenticated())
+		if ($this->isAuthenticated())
 		{
 			$url = $this->getLink();
 			$jdata = $this->query($url, null, array('GData-Version' => 2));
