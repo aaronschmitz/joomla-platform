@@ -86,6 +86,10 @@ class JGoogleTest extends PHPUnit_Framework_TestCase
 		$this->options->set('clientid', '1075367716947.apps.googleusercontent.com');
 		$this->options->set('redirecturi', 'http://j.aaronschmitz.com/web/calendar-test');
 		$this->assertThat(
+			$this->object->data('Plus'),
+			$this->isInstanceOf('JGoogleDataPlus')
+		);
+		$this->assertThat(
 			$this->object->data('Picasa'),
 			$this->isInstanceOf('JGoogleDataPicasa')
 		);
